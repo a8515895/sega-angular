@@ -1,1 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+ul>li{
+    list-style: none;
+}
+.h100{
+    height: 100%;
+}
+.w100{
+    width: 100%;
+}
+.row{
+    margin : 0;
+}
+.text-center{
+    text-align : center
+}
+a{
+    color: #333;
+    text-decoration: none;
+    display: block;
+}
+p{
+    margin : 0;
+}
+a:hover{
+    text-decoration: none;
+}
+.fl{
+    float: left;
+}
+.lh0{
+    line-height: 0;
+}
+.lh1{
+    line-height: 1;
+}
+.lh2{
+    line-height: 2;
+}
+.p10{
+    padding: 10px;
+}
+.bgW{
+    background: #fff
+}
+.box{
+    box-shadow:3px 5px 1px 2px #ccc;
+    background : #fff
+}
