@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot,Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import 'rxjs/add/operator/map';
@@ -11,7 +12,7 @@ export class HttpService {
     options : any;
     token : any;
     baseUrl : string = 'http://laravel.sega-group.com/api/';
-    constructor(private http: Http,private cookieService: CookieService) {
+    constructor(private http: Http,private cookieService: CookieService,private router : Router) {
 
     }
     public get(url,body=null){
@@ -79,7 +80,10 @@ export class HttpService {
         return body || [];
     }
 
-    private handleError = (error: any) => {
-        return Observable.of(error);
-    }
+    private handleError (error: Response) {
+        if(error.status == 403 || error.status == 401){
+            alert("Đăng nhập hết hạn. Mời đăng nhập lại");
+        }
+        return Observable.throw(error.json().error || "Server error");
+      }
 }

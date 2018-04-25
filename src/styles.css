@@ -3,6 +3,10 @@
 ul>li{
     list-style: none;
 }
+body,html{
+    height: 100%;
+    width: 100%;
+}
 .h100{
     height: 100%;
 }
@@ -47,4 +51,45 @@ a:hover{
 .box{
     box-shadow:3px 5px 1px 2px #ccc;
     background : #fff
+}
+.box-contain{
+    border-radius: 4px;
+    background: #fff; 
+    min-height: 150px;
+    min-width: 150px;
+}
+.box-contain>.box-header{
+    padding: 10px;
+    min-height: 5%;
+    border-top: 3px solid #ccc;
+    background: #eee;
+}
+.box-contain>.box-content{
+    min-height: 90%;
+    padding: 10px;    
+}
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+  
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}  
+.mat-column-select {
+    overflow: visible;
+}
+.hide{
+    display: none;
+}
+.block{
+    display: block;
 }

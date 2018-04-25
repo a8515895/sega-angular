@@ -8,10 +8,8 @@ export class DialogService {
         let dialogRef = this.dialog.open(Dialog, {
             width: '450px',
             data: {title : title,data : data},
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
-          });  
+          });       
+        return dialogRef;
     }
+    
 }

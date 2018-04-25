@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter,ElementRef } from '@angular/core';
 import { ProductService } from '../../service/product.service';
-
+import * as jQuery from 'jquery';
+import "datatables.net";
 @Component({
     selector: 'product',
     templateUrl: 'product.component.html'

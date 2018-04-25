@@ -18,11 +18,11 @@ export class LoginComponent implements OnInit {
     onSubmit(){
         this._sv.login(this.model).then(
             res => {  
+                console.log(res);
                 if(res.status){
                     this.cookieService.putObject('user',res.user);
                     this.cookieService.put('isLogin',res.access_token);   
-                    if(res.level == 0) return this.router.navigate(['/teacher']);
-                    else return this.router.navigate(['/student']);
+                    return this.router.navigate(['/']);
                 }
                 console.log('fail');
             },
