@@ -12,6 +12,12 @@ export class ProductService {
     getProduct(){
         return this._http.get('getListProduct');
     }
+    addProduct(data){
+        return this._http.post('addProduct',data);
+    }
+    deleteProduct(data){
+        return this._http.delete('deleteProduct',data);
+    }
     private extractData(res: Response) {
         let body = res.json();
         return body || {};

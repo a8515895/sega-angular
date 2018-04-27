@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { FormsModule,ReactiveFormsModule  }   from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -18,7 +19,8 @@ import { Select2Module } from 'ng2-select2';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-//COMPONENT
+import { SlimScroll } from 'angular-io-slimscroll';
+ //COMPONENT
 import { LayoutComponent} from './layout/layout.component';
 import { ProductComponent} from './module/product/product.component';
 import { LoginComponent} from './module/verify/login/login.component';
@@ -45,6 +47,7 @@ import { CategoryComponent } from './module/category/category.component';
 import { BillComponent } from './module/bill/bill.component';
 @NgModule({
   declarations: [
+    SlimScroll,
     LayoutComponent,
     AppComponent,
     ProductComponent,

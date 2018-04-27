@@ -93,16 +93,8 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="parent_name">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề cha </mat-header-cell>
-                            <mat-cell *matCellDef="let row" (click)="toggleEdit($event,row,'parent')"> 
+                            <mat-cell *matCellDef="let row"> 
                                 <span>{{row.parent_name}}</span>
-                                <mat-form-field class="hide">
-                                    <mat-select (keyup)="toggleEdit($event,row,'parent')">
-                                        <mat-option [value]="0">Chủ đề cha</mat-option>
-                                        <mat-option *ngFor="let i of listAllCategoryParent" [value]="i.value">
-                                            {{i.viewValue}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
                             </mat-cell>
                     </ng-container>
                     <!-- Color Column -->
