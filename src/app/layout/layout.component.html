@@ -22,7 +22,7 @@
                   <div style="height : 100%">
                       <span style="height : 30px;width : 30px;background : #fff;margin : 10px;border-radius : 100%;float : left"></span>
                       <span style="float : left;margin-top : 25px;margin-right : 10px;color : #fff;font-weight : bold">
-                          Anh khoa
+                          {{name}}
                           <span style="float : right;margin-left: 10px;" class="caret"></span>
                       </span>
                   </div>
@@ -33,11 +33,11 @@
   <div class="main-wrapper">
         <div class="left">
             <ul>
-                <li><a routerLink="/dashboard" routerLinkActive="active-link"><fa name="dashboard"></fa> Dashboard</a></li>
-                <li><a routerLink="/admin" routerLinkActive="active-link"><fa name="users"></fa> Admin</a></li>
-                <li><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Category</a></li>
-                <li><a routerLink="/product" routerLinkActive="active-link"><fa name="database"></fa> Product</a></li>
-                <li><a routerLink="/bill" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a></li>
+                <li *ngIf="privilege.dashboard"><a routerLink="/dashboard" routerLinkActive="active-link"><fa name="dashboard"></fa> Dashboard</a></li>
+                <li *ngIf="privilege.admin"><a routerLink="/admin" routerLinkActive="active-link"><fa name="users"></fa> Admin</a></li>
+                <li *ngIf="privilege.category"><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Category</a></li>
+                <li *ngIf="privilege.product"><a routerLink="/product" routerLinkActive="active-link"><fa name="database"></fa> Product</a></li>
+                <li *ngIf="privilege.bill"><a routerLink="/bill" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a></li>
             </ul>
         </div>
         <div class="right">

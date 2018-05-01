@@ -20,8 +20,8 @@ const routes: Routes = [
         path: '',
         canActivate: [Auth],
         component: LayoutComponent,
-        children: [
-            { path: '', component: DashboardComponent, pathMatch: 'full'},
+        children: [            
+            { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
             { path: 'dashboard', component: DashboardComponent, pathMatch: 'full'},
             { path: 'admin', component: AdminComponent, pathMatch: 'full'},
             { path: 'product', component: ProductComponent, pathMatch: 'full'},

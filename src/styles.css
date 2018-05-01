@@ -55,20 +55,19 @@ a:hover{
 .box-contain{
     border-radius: 4px;
     background: #fff; 
-    min-height: 150px;
     min-width: 150px;
     max-height: 100%;
     overflow-x: auto;
+    height: 100%;
 }
 .box-contain>.box-header{
     padding: 10px;
-    min-height: 5%;
+    height: 5%;
     border-top: 3px solid #ccc;
     background: #eee;
 }
 .box-contain>.box-content{
-    min-height: 30%;
-    max-height: 100%;
+    height: 95%;
     padding: 10px;    
 }
 .example-section {

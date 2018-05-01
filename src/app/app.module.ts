@@ -15,39 +15,45 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 //PLUGIN
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-import { Select2Module } from 'ng2-select2';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { SlimScroll } from 'angular-io-slimscroll';
+import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
  //COMPONENT
 import { LayoutComponent} from './layout/layout.component';
 import { ProductComponent} from './module/product/product.component';
 import { LoginComponent} from './module/verify/login/login.component';
 import { LogoutComponent} from './module/verify/logout/logout.component';
-import { NotFoundComponent } from './module/NotFound.component';
-
+import { NotFoundComponent } from './module/NotFound.component'
 import { TestComponent} from './test.component';
+import { DashboardComponent } from './module/dashboard/dashboard.component';
+import { AdminComponent } from './module/admin/admin.component';
+import { CategoryComponent } from './module/category/category.component';
+import { BillComponent } from './module/bill/bill.component';
+// DIRECTIVE
+import {OnlyNumber} from './directive/OnlyNumber.directive';
+import {Confirm} from './directive/Confirm.directive';
+
 // DYNAMIC COMPONENT
 import { Dialog} from './dynamic/dialog/Dialog.component';
 // COMPONENT SERVICE
 import { ProductService } from './service/product.service';
+import { BillService } from './service/bill.service';
 import { CategoryService } from './service/category.service';
 import { VerifyService } from './service/verify.service';
 import { DialogService } from './service/dialog.service';
+import { DashboardService } from './service/dashboard.service';
 // AUTH SERVICE
 import { Auth } from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
 
 import { HttpService } from './service/http.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { DashboardComponent } from './module/dashboard/dashboard.component';
-import { AdminComponent } from './module/admin/admin.component';
-import { CategoryComponent } from './module/category/category.component';
-import { BillComponent } from './module/bill/bill.component';
+
 @NgModule({
   declarations: [
-    SlimScroll,
+    OnlyNumber,
+    Confirm,
     LayoutComponent,
     AppComponent,
     ProductComponent,
@@ -64,10 +70,10 @@ import { BillComponent } from './module/bill/bill.component';
   ],
   imports: [
     HttpModule,
+    ChartModule,
     MatButtonModule,
     MatCheckboxModule,
     MatPaginatorModule ,
-    Select2Module,
     AppRoutingModule,
     MatFormFieldModule,
     MatInputModule,
@@ -92,7 +98,7 @@ import { BillComponent } from './module/bill/bill.component';
     
   ],
   entryComponents: [Dialog],
-  providers: [ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService],
+  providers: [DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService],
   bootstrap: [AppComponent],
   exports: [MatButtonModule, MatCheckboxModule]
 })

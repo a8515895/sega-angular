@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-
+declare var $ :any;
 @Injectable()
 export class HttpService {
     headers : any;

@@ -18,13 +18,14 @@ export class LoginComponent implements OnInit {
     onSubmit(){
         this._sv.login(this.model).then(
             res => {  
-                console.log(res);
                 if(res.status){
+                    console.log(res);
                     this.cookieService.putObject('user',res.user);
                     this.cookieService.put('isLogin',res.access_token);   
+                    this.cookieService.put('level',res.level);   
                     return this.router.navigate(['/']);
                 }
-                console.log('fail');
+                alert("Đăng nhập thất bại");
             },
             err => {
                 console.log(err);
