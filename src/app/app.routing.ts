@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 // LAYOUT
 //
 import { ProductComponent} from './module/product/product.component';
+import { ChatComponent} from './module/chat/chat.component';
 import { DashboardComponent} from './module/dashboard/dashboard.component';
 import { LoginComponent} from './module/verify/login/login.component';
 import { LogoutComponent} from './module/verify/logout/logout.component';
@@ -12,6 +13,8 @@ import { LayoutComponent} from './layout/layout.component';
 import { AdminComponent } from './module/admin/admin.component';
 import { CategoryComponent } from './module/category/category.component';
 import { BillComponent } from './module/bill/bill.component';
+import { ImportComponent } from './module/import/import.component';
+import { ReportComponent } from './module/report/report.component';
 import { TestComponent} from './test.component';
 import {Auth} from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
@@ -27,6 +30,9 @@ const routes: Routes = [
             { path: 'product', component: ProductComponent, pathMatch: 'full'},
             { path: 'category', component: CategoryComponent, pathMatch: 'full'},
             { path: 'bill', component: BillComponent, pathMatch: 'full'},
+            { path: 'import', component: ImportComponent, pathMatch: 'full'},
+            { path: 'report', component: ReportComponent, pathMatch: 'full'},
+            { path: 'chat', component: ChatComponent, pathMatch: 'full'},
         ]
         
     },

@@ -17,6 +17,9 @@ export class LayoutComponent implements OnInit {
     category : true,
     product : true,
     dashboard : true,
+    import : true,
+    report : true,
+    chat : true,
   }
   constructor(private cookieService : CookieService) { }
   ngOnInit() {
@@ -26,6 +29,8 @@ export class LayoutComponent implements OnInit {
       this.privilege.category=false;
       this.privilege.product=false;
       this.privilege.dashboard=false;
+      this.privilege.import=false;
+      this.privilege.report=false;
     }
   }
   onHideDropdown(){

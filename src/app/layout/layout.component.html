@@ -34,10 +34,15 @@
         <div class="left">
             <ul>
                 <li *ngIf="privilege.dashboard"><a routerLink="/dashboard" routerLinkActive="active-link"><fa name="dashboard"></fa> Dashboard</a></li>
+                <li *ngIf="privilege.chat"><a routerLink="/chat" routerLinkActive="active-link"><fa name="message"></fa> Chat</a></li>
                 <li *ngIf="privilege.admin"><a routerLink="/admin" routerLinkActive="active-link"><fa name="users"></fa> Admin</a></li>
                 <li *ngIf="privilege.category"><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Category</a></li>
                 <li *ngIf="privilege.product"><a routerLink="/product" routerLinkActive="active-link"><fa name="database"></fa> Product</a></li>
                 <li *ngIf="privilege.bill"><a routerLink="/bill" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a></li>
+                <li *ngIf="privilege.import"><a routerLink="/import" routerLinkActive="active-link"><fa name="cart-plus"></fa> Nhập hàng</a></li>
+                <li *ngIf="privilege.report">
+                    <a routerLink="/report" routerLinkActive="active-link"><fa name="bar-chart"></fa> Báo cáo</a>
+                </li>
             </ul>
         </div>
         <div class="right">

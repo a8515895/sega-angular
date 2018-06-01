@@ -1,0 +1,33 @@
+.chat-content{
+    height: 700px;
+    width: 100%;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+.chat-content>.left{
+    float: left;
+    border-right: 1px solid #ccc;
+    height: 100%;
+    background: #f9f9f9;
+    width: calc(20% - 1px);
+}
+
+
+.chat-content>.right{
+    float: left;
+    width: 80%;
+    height: 100%;
+}
+.chat-content>.right>.display-mess{
+    height: 90%;
+    border-bottom : 1px solid #ccc;
+    width: 100%;
+    background: #f9f9f9;
+    overflow-x : hidden;
+}
+.chat-content>.right>.input-mess{
+    height: 10%;
+    border-bottom : 1px solid #ccc;
+    width: 100%;
+    overflow: hidden;
+}

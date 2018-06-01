@@ -179,4 +179,14 @@ export class BillComponent implements OnInit {
       this.getListBill();
     })
   }
+  paymentDestroy(bill){
+    let data = {
+      id : bill,
+      status : 'delete',
+    };
+    this.bs.updateBill(data).then(res=>{
+      this.toastr.warning("Hủy hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+      this.getListBill();
+    })
+  }
 }

@@ -57,6 +57,7 @@
                                         <th>Giá</th>
                                         <th>Thanh toán</th>
                                         <th>Ghi nợ</th>
+                                        <th>Hủy</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,6 +70,9 @@
                                         <td>
                                             <input #deptName style="display: inline-block" placeholder="Tên người nợ"/>
                                             <button class="btn btn-danger" (click)="paymentDebt(bill.id,deptName.value)">Nợ</button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning" (click)="paymentDestroy(bill.id)">Hủy</button>
                                         </td>
                                     </tr>
                                 </tbody>

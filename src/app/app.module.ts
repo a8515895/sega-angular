@@ -19,7 +19,10 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
- //COMPONENT
+
+import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+const config: SocketIoConfig = { url: 'https://sega-group.com:3000', options: {secure: true} };
+//COMPONENT
 import { LayoutComponent} from './layout/layout.component';
 import { ProductComponent} from './module/product/product.component';
 import { LoginComponent} from './module/verify/login/login.component';
@@ -30,6 +33,10 @@ import { DashboardComponent } from './module/dashboard/dashboard.component';
 import { AdminComponent } from './module/admin/admin.component';
 import { CategoryComponent } from './module/category/category.component';
 import { BillComponent } from './module/bill/bill.component';
+import { ReportComponent } from './module/report/report.component';
+import { ImportComponent } from './module/import/import.component';
+import { ChatComponent } from './module/chat/chat.component';
+
 // DIRECTIVE
 import {OnlyNumber} from './directive/OnlyNumber.directive';
 import {Confirm} from './directive/Confirm.directive';
@@ -43,12 +50,15 @@ import { CategoryService } from './service/category.service';
 import { VerifyService } from './service/verify.service';
 import { DialogService } from './service/dialog.service';
 import { DashboardService } from './service/dashboard.service';
+import { ImportService } from './service/import.service';
+import { ReportService } from './service/report.service';
 // AUTH SERVICE
 import { Auth } from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
 
 import { HttpService } from './service/http.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+
 
 @NgModule({
   declarations: [
@@ -67,6 +77,9 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
     AdminComponent,
     CategoryComponent,
     BillComponent,
+    ReportComponent,
+    ImportComponent,
+    ChatComponent,
   ],
   imports: [
     HttpModule,
@@ -94,11 +107,12 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
       confirmButtonType: 'danger'
     }),
     ToastModule.forRoot(),
+    SocketIoModule.forRoot(config) 
     // NgbModule.forRoot(),
     
   ],
   entryComponents: [Dialog],
-  providers: [DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService],
+  providers: [ImportService,ReportService,DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService],
   bootstrap: [AppComponent],
   exports: [MatButtonModule, MatCheckboxModule]
 })

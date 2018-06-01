@@ -118,7 +118,7 @@
                     <!-- Color Column -->
                     <ng-container matColumnDef="price">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Giá </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.price}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.price | number}} VND</mat-cell>
                     </ng-container>
                 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

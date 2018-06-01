@@ -14,7 +14,7 @@
                     <input type="text" name="username" [(ngModel)]="model.username">
                 <label>Password</label>
                     <input type="password" name="password" [(ngModel)]="model.password">
-                <button type="submit">Sign In</button>
+                <button type="submit" [disabled]="disable"><fa name="cog" animation="spin" *ngIf="disable"></fa> Sign In</button>
             </form>
             </div>
             <div class="social-login">

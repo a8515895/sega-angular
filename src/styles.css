@@ -7,6 +7,9 @@ body,html{
     height: 100%;
     width: 100%;
 }
+.media {
+    margin-top: 0;
+}
 .h100{
     height: 100%;
 }
@@ -90,3 +93,50 @@ a:hover{
 .block{
     display: block;
 }
+.activeChat{
+    margin-right: -1px;
+    border-right: 1px solid #fff;
+    background: #fff;
+    display: block !important;
+}
+.mess-reply{
+    float: right !important;
+}
+.chat-body{
+    width: max-content;
+    background: #2374ac;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}
+.contentChat{
+    overflow-x : hidden;
+    background : #fff;
+}
+li.list-user{
+    padding: 5px;
+    border-bottom : 1px solid #ccc;
+    position: relative;
+}
+.disable-user{
+    background: #ccc;
+}
+li.list-user>.closeUser{
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    background: #fff;
+    border-radius: 100%;
+    display: none;
+    top : 0;
+}
+li.list-user.disable-user>.closeUser{
+    display: block;
+}
+li.list-user>.closeUser>i{
+    text-align: center;
+    margin: auto;
+    display: block;
+    cursor: pointer;
+}
+

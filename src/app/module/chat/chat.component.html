@@ -1,0 +1,18 @@
+<div class="box-contain">
+  <div class="box-header">Chat</div>
+  <div class="box-content">
+    <section class="chat-content">
+      <div class="left">
+        <ul style="padding : 0" #listCustomer>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="display-mess" #displayMess>
+        </div>
+        <div class="input-mess">
+          <textarea style="height: 100%;width : 100%;border : 0" (keyup)="enterInput($event)"></textarea>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
