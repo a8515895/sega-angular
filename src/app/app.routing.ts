@@ -12,9 +12,12 @@ import { NotFoundComponent } from './module/NotFound.component';
 import { LayoutComponent} from './layout/layout.component';
 import { AdminComponent } from './module/admin/admin.component';
 import { CategoryComponent } from './module/category/category.component';
+import { EventComponent } from './module/event/event.component';
 import { BillComponent } from './module/bill/bill.component';
+import { BillAddComponent } from './module/bill/bill-add.component';
 import { ImportComponent } from './module/import/import.component';
 import { ReportComponent } from './module/report/report.component';
+import { ProducerComponent } from './module/producer/producer.component';
 import { TestComponent} from './test.component';
 import {Auth} from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
@@ -28,8 +31,13 @@ const routes: Routes = [
             { path: 'dashboard', component: DashboardComponent, pathMatch: 'full'},
             { path: 'admin', component: AdminComponent, pathMatch: 'full'},
             { path: 'product', component: ProductComponent, pathMatch: 'full'},
+            { path: 'producer', component: ProducerComponent, pathMatch: 'full'},
             { path: 'category', component: CategoryComponent, pathMatch: 'full'},
-            { path: 'bill', component: BillComponent, pathMatch: 'full'},
+            { path: 'event', component: EventComponent, pathMatch: 'full'},
+            { path: 'bill', children: [
+                { path: 'add', component: BillAddComponent, pathMatch: 'full'},
+                { path: 'list', component: BillComponent, pathMatch: 'full'},
+            ]},
             { path: 'import', component: ImportComponent, pathMatch: 'full'},
             { path: 'report', component: ReportComponent, pathMatch: 'full'},
             { path: 'chat', component: ChatComponent, pathMatch: 'full'},

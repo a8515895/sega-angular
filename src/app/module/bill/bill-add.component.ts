@@ -1,5 +1,4 @@
 import { Component, OnInit,ViewChild,ViewContainerRef,ElementRef} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -10,14 +9,11 @@ import BASE_URL from '../../global';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import * as $ from 'jquery';
-
 @Component({
-  selector: 'app-bill',
-  templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.css']
+  selector: 'app-bill-add',
+  templateUrl: './bill-add.component.html',
 })
-export class BillComponent implements OnInit {
+export class BillAddComponent implements OnInit {
   product = new Array();
   currentBill = new Array();
   newBill = new Array();
@@ -28,10 +24,6 @@ export class BillComponent implements OnInit {
   stateCtrl: FormControl;
   agent : String = this.cookieService.getObject('user')['original']['id'];
   filteredStates: Observable<any[]>;
-  displayedColumns = ['select','bill_code','status','total','assign','customer','address','phone','payment','payment_type','create_at'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<Element>(true, []);
   constructor(private ps : ProductService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -39,7 +31,6 @@ export class BillComponent implements OnInit {
   ngOnInit() {
     this.getListProduct();
     this.getListBill();
-    this.getListAllBill();
     this.stateCtrl = new FormControl();
     this.filteredStates = this.stateCtrl.valueChanges.pipe(
       startWith(''),
@@ -65,18 +56,6 @@ export class BillComponent implements OnInit {
       res => {        
         this.newBill=res;
         this.tmpNewBill=res;
-      },
-      err => {
-          console.log(err);
-      }
-    )
-  }
-  getListAllBill(){
-    this.bs.getBill().then(
-      res => {        
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
       },
       err => {
           console.log(err);
@@ -120,20 +99,6 @@ export class BillComponent implements OnInit {
       $event.target.value = "";
     }
   }
-  searchTables(table){
-    let check = false;
-    if(Number.isInteger(Number(table)) && table != "" && table != null){
-      this.newBill.forEach(e=>{
-        if(e.table==table){
-          this.tmpNewBill=new Array();
-          this.tmpNewBill.push(e);
-          check = true;
-          return;
-        }
-      })
-    }
-    if(!check)  this.tmpNewBill=this.newBill;
-  }
   refreshBill(){
     this.currentBill = new Array();
   }
@@ -151,12 +116,15 @@ export class BillComponent implements OnInit {
       }
     })
   }
-  successBill(table){
-    if(table==0 || table==null || table=='' || !Number.isInteger(Number(table))){
-      return this.toastr.error("Chưa chọn bàn",'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+  confirmBill(){
+    if(this.currentBill.length != 0){
+      $("#myModal2").modal("show");
+    }else{
+      this.toastr.warning("Không có sản phẩm nào");
     }
+  }
+  successBill(){
     let data = {
-      table : table,
       detail : this.currentBill,
       createBy : this.cookieService.getObject('user')['original']['id'],
       total : 0,
@@ -167,7 +135,6 @@ export class BillComponent implements OnInit {
     this.bs.addBill(data).then(res=>{
       if(res.err==0){
         this.currentBill=new Array();
-        table='';
         this.getListBill();
         this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       }else{
@@ -210,16 +177,6 @@ export class BillComponent implements OnInit {
       this.toastr.warning("Hủy hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       this.getListBill();
     })
-  }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  masterToggle() {
-      this.isAllSelected() ?
-          this.selection.clear() :
-          this.dataSource.data.forEach(row => this.selection.select(row));
   }
   updateStatusPayment(id,payment){
     if(payment == 1) payment = 0;

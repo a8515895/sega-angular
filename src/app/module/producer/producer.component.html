@@ -1,0 +1,76 @@
+<div class="box-contain" height="100%">
+    <div class="box-header">Nhà sản xuất</div>
+    <div class="box-content" >
+        <div class="row" >
+            <div class="col-md-12" style="position : relative">
+                <div style="position : absolute;height: 25px;width: 25px;cursor : pointer;color: #fff;text-align: center;line-height: 1.8;border-radius: 100%;background: #ccc;right : 5px;top : -10px">
+                    <fa name="minus"></fa>
+                </div>
+                <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;">
+                    <form (ngSubmit)="onSubmit($event)" #form="ngForm">
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                                Nhà sản xuất*
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width : 100%">
+                                    <input matInput placeholder="Producer" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
+                                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                        <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                        <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
+                                        <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                    </mat-error>                                    
+                                </mat-form-field>
+                            </div>
+                        </div>                      
+                        <div class="row" style="margin-top : 10px">             
+                            <div class="col-md-6 col-md-offset-6">
+                                <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nhà sản xuất </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+                    </ng-container>
+                    
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);">
+                    </mat-row>
+                </mat-table>
+                <div class="row">
+                    <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
+                        <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                            <fa name="trash"></fa>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

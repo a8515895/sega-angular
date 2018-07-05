@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot,Router } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { CookieBackendService } from 'angular2-cookie/services/cookies.backend.service';
 
 @Injectable()
 export class Auth implements CanActivate {

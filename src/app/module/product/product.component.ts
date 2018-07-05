@@ -2,13 +2,10 @@ import { Component, OnInit,ViewChild,ViewContainerRef} from '@angular/core';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
-import { ArrayType } from '@angular/compiler/src/output/output_ast';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { DialogService } from '../../service/dialog.service';
 import { ProductService } from '../../service/product.service';
+import { ProducerService } from '../../service/producer.service';
 import { CategoryService } from '../../service/category.service';
-import {FormBuilder, FormGroup, Validators,FormControl} from "@angular/forms";
-import * as jQuery from 'jquery';
 import BASE_URL from '../../global';
 @Component({
     selector: 'product',
@@ -18,8 +15,9 @@ import BASE_URL from '../../global';
 export class ProductComponent implements OnInit {
     product : any;
     fakeUrl : any;
+    fakeUrl2 : any;
     base_url : any = BASE_URL;
-    displayedColumns = ['select','id','img', 'name','category', 'price'];
+    displayedColumns = ['select','id','img', 'name','category','producer', 'price'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     public popoverTitle: string = 'Bạn có chắc muốn xóa ???';
@@ -29,10 +27,12 @@ export class ProductComponent implements OnInit {
     selection = new SelectionModel<Element>(true, []);
     value = 50;
     listCategory = new Array();
+    listProducer = new Array();
     model={
         category : '',
         name : '',
         price : '',
+        producer : '',
         create_by: this.cookieService.getObject('user')['original']['id'],
         img: {
             name : "",
@@ -40,13 +40,26 @@ export class ProductComponent implements OnInit {
             type : ""
         },        
     }
-    
-    constructor(private ps : ProductService,private cs : CategoryService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
+    update_model={
+        id : '',
+        category : '',
+        name : '',
+        price : '',
+        producer : '',
+        update_by: this.cookieService.getObject('user')['original']['id'],
+        img: {
+            name : "",
+            value : "",
+            type : ""
+        },        
+    }
+    constructor(private nsx : ProducerService,private ps : ProductService,private cs : CategoryService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
         this.toastr.setRootViewContainerRef(vcr);
     }
     ngOnInit() { 
         this.getListProduct();
         this.getListCategory();
+        this.getListProducer();
     }
     getListProduct(){
         this.ps.getProduct().then(
@@ -55,6 +68,7 @@ export class ProductComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(res);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+                console.log(this.product);
             },
             err => {
                 console.log(err);
@@ -65,6 +79,13 @@ export class ProductComponent implements OnInit {
         this.cs.getCategory().then(
             res=>{
                 this.listCategory = res;
+            }
+        );
+    }
+    getListProducer(){
+        this.nsx.getProducer().then(
+            res=>{
+                this.listProducer = res;
             }
         );
     }
@@ -95,6 +116,23 @@ export class ProductComponent implements OnInit {
             }      
         }
     }
+    readUrl2(event:any) {
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            let file = event.target.files[0];
+            if(file.type=="image/png" || file.type=="image/jpg" || file.type=="image/jpeg"){
+                reader.readAsDataURL(event.target.files[0]);
+                reader.onload = (event:any) => {
+                    this.fakeUrl2 = event.target.result;
+                    this.update_model.img.value=reader.result.split(',')[1];
+                    this.update_model.img.name = file.name;
+                    this.update_model.img.type = file.type;
+                }
+            }else{
+                this.toastr.error("Chỉ chọn file hình",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+            }      
+        }
+    }
     onSubmit($event){
         if(this.model.img.value != ""){
             this.ps.addProduct(this.model).then(
@@ -103,6 +141,7 @@ export class ProductComponent implements OnInit {
                         category : '',
                         name : '',
                         price : '',
+                        producer : '',
                         create_by: this.cookieService.getObject('user')['original']['id'],
                         img: {
                             name : "",
@@ -124,6 +163,34 @@ export class ProductComponent implements OnInit {
         }
 
     }
+    onSubmit2($event){
+        $('#myModal').modal('hide');
+        this.ps.updateProduct(this.update_model).then(
+            res =>{
+                this.update_model={
+                    id : '',
+                    category : '',
+                    name : '',
+                    price : '',
+                    producer : '',
+                    update_by: this.cookieService.getObject('user')['original']['id'],
+                    img: {
+                        name : "",
+                        value : "",
+                        type : ""
+                    },        
+                }
+                this.fakeUrl2 = "";
+                this.getListProduct();
+                if(res.err == 0){
+                    this.toastr.success("Cập nhật thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+                    
+                }else{
+                    this.toastr.error(res.err,'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+                }            
+            }
+        )        
+    }
     clickTrash(){
         if(this.selection.selected.length==0){
             return this.toastr.error("Chưa select sản phẩm xóa",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -138,6 +205,19 @@ export class ProductComponent implements OnInit {
         });
     }
     editRow(row){
-        console.log(row);
+        this.update_model={
+            id : row.id,
+            category : row.id_category,
+            name : row.name,
+            price : row.price,
+            producer : row.id_producer,
+            update_by: this.cookieService.getObject('user')['original']['id'],
+            img: {
+                name : "",
+                value : "",
+                type : ""
+            },        
+        }
+        $('#myModal').modal('show')
     }
 }

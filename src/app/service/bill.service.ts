@@ -10,7 +10,7 @@ export class BillService {
     constructor(private _http: HttpService) {    
     }
     getBill(){
-        return this._http.get('getListBill');
+        return this._http.get('getListAllBill');
     }
     getBillDetail(data){
         return this._http.get('getListBillDetail',data);

@@ -2,31 +2,40 @@
   <div class="main-header">        
       <div style="height : 100%" class="pull-right">
           <ul>
-              <li class="fl lh0" style="cursor : pointer" (click)="onShowDropdown($event)">
-                  <div class="header-info" *ngIf="isShowDropdown">
-                      <ul style="height : 100%;padding : 0">
-                          <li class="lh2 header-info-li" style="font-weight : bold;font-size : 13px">
-                              <a routerLink="/logout">
-                                  <fa name="user"></fa>
-                                  Thiết lập tài khoản
-                              </a>
-                          </li>
-                          <li class="lh2 header-info-li" style="font-weight : bold;font-size : 13px">
-                              <a routerLink="/logout">
-                                  <fa name="power-off"></fa>
-                                  Đăng xuất
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-                  <div style="height : 100%">
-                      <span style="height : 30px;width : 30px;background : #fff;margin : 10px;border-radius : 100%;float : left"></span>
-                      <span style="float : left;margin-top : 25px;margin-right : 10px;color : #fff;font-weight : bold">
-                          {{name}}
-                          <span style="float : right;margin-left: 10px;" class="caret"></span>
-                      </span>
-                  </div>
-              </li>
+            <li class="fl lh0" style="position : relative;cursor : pointer;padding : 0 10px;color : #fff;line-height: 4;height: 50px">
+                <fa name="bell" size="2x"></fa>
+            </li>
+            <li class="fl lh0" style="position : relative;cursor : pointer;padding : 0 10px;color : #fff;line-height: 4;height: 50px">
+                <fa name="comment" size="2x"></fa>
+                <span id="total-not-seen" class="number-chat-not-seen">2</span>
+            </li>
+            <li class="fl lh0" style="cursor : pointer;position : relative;" (click)="onShowDropdown($event)">
+                <div class="header-info" *ngIf="isShowDropdown" style="position : absolute;right : 0;width: max-content">
+                    <ul style="height : 100%;padding : 0;">
+                        <li class="lh2 header-info-li" style="font-weight : bold;font-size : 13px">
+                            <a routerLink="/logout">
+                                <fa name="user"></fa>
+                                Thiết lập tài khoản
+                            </a>
+                        </li>
+                        <li class="lh2 header-info-li" style="font-weight : bold;font-size : 13px">
+                            <a routerLink="/logout">
+                                <fa name="power-off"></fa>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div style="height : 100%">                    
+                    <span style="height : 30px;width : 30px;background : #fff;margin : 10px;border-radius : 100%;float : left">
+                        <img class="img-circle" src="{{avartar}}" style="height: 100%;width : 100%;"/>
+                    </span>
+                    <span style="float : left;margin-top : 25px;margin-right : 10px;color : #fff;font-weight : bold">
+                        {{name}}
+                        <span style="float : right;margin-left: 10px;" class="caret"></span>
+                    </span>
+                </div>
+            </li>
           </ul>
       </div>
   </div>
@@ -34,12 +43,24 @@
         <div class="left">
             <ul>
                 <li *ngIf="privilege.dashboard"><a routerLink="/dashboard" routerLinkActive="active-link"><fa name="dashboard"></fa> Dashboard</a></li>
-                <li *ngIf="privilege.chat"><a routerLink="/chat" routerLinkActive="active-link"><fa name="message"></fa> Chat</a></li>
+                <li *ngIf="privilege.chat"><a routerLink="/chat" routerLinkActive="active-link"><fa name="comments"></fa> Chat</a></li>
                 <li *ngIf="privilege.admin"><a routerLink="/admin" routerLinkActive="active-link"><fa name="users"></fa> Admin</a></li>
                 <li *ngIf="privilege.category"><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Category</a></li>
+                <li *ngIf="privilege.event"><a routerLink="/event" routerLinkActive="active-link"><fa name="calendar"></fa> Event</a></li>
+                <li *ngIf="privilege.producer"><a routerLink="/producer" routerLinkActive="active-link"><fa name="university"></fa> Producer</a></li>
                 <li *ngIf="privilege.product"><a routerLink="/product" routerLinkActive="active-link"><fa name="database"></fa> Product</a></li>
-                <li *ngIf="privilege.bill"><a routerLink="/bill" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a></li>
-                <li *ngIf="privilege.import"><a routerLink="/import" routerLinkActive="active-link"><fa name="cart-plus"></fa> Nhập hàng</a></li>
+                <li *ngIf="privilege.bill" style="position: relative;z-index: 100" (mouseenter)="mouseEnterBill()" (mouseleave)="mouseLeaveBill()">
+                    <a routerLink="/bill/add" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a>
+                    <ul *ngIf="isShowBill" style="width : 100%;margin: 0;padding: 0;position : absolute;left : 192px;top : 0">
+                        <li class="w100" style="background : #2374ac;cursor : pointer">
+                            <a routerLink="/bill/add" routerLinkActive="active-link" style="font-size: 14px;font-weight: bold;line-height: 3;padding: 10px;color : #fff">Thêm Hoá đơn</a>
+                        </li>
+                        <li class="w100" style="background : #2374ac;cursor : pointer">
+                            <a routerLink="/bill/list" routerLinkActive="active-link" style="font-size: 14px;font-weight: bold;line-height: 3;padding: 10px;color : #fff">Danh sách Hoá đơn</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngIf="privilege.import"><a routerLink="/import" routerLinkActive="active-link"><fa name="download"></fa> Nhập hàng</a></li>
                 <li *ngIf="privilege.report">
                     <a routerLink="/report" routerLinkActive="active-link"><fa name="bar-chart"></fa> Báo cáo</a>
                 </li>

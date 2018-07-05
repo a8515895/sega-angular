@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule, RequestOptions } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { FormsModule,ReactiveFormsModule  }   from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule} from './app.routing';
-import {MatButtonModule,MatCheckboxModule,MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatPaginatorModule  } from '@angular/material';
+import {MatNativeDateModule,MatButtonModule,MatCheckboxModule,MatFormFieldModule,MatInputModule,MatAutocompleteModule,MatPaginatorModule  } from '@angular/material';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatRadioModule} from '@angular/material/radio';
@@ -13,13 +13,14 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSortModule} from '@angular/material/sort';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 //PLUGIN
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
-
+import { ChartModule } from 'angular-highcharts';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 const config: SocketIoConfig = { url: 'https://sega-group.com:3000', options: {secure: true} };
 //COMPONENT
@@ -33,9 +34,11 @@ import { DashboardComponent } from './module/dashboard/dashboard.component';
 import { AdminComponent } from './module/admin/admin.component';
 import { CategoryComponent } from './module/category/category.component';
 import { BillComponent } from './module/bill/bill.component';
+import { BillAddComponent } from './module/bill/bill-add.component';
 import { ReportComponent } from './module/report/report.component';
 import { ImportComponent } from './module/import/import.component';
 import { ChatComponent } from './module/chat/chat.component';
+import { ProducerComponent } from './module/producer/producer.component';
 
 // DIRECTIVE
 import {OnlyNumber} from './directive/OnlyNumber.directive';
@@ -45,6 +48,7 @@ import {Confirm} from './directive/Confirm.directive';
 import { Dialog} from './dynamic/dialog/Dialog.component';
 // COMPONENT SERVICE
 import { ProductService } from './service/product.service';
+import { ProducerService } from './service/producer.service';
 import { BillService } from './service/bill.service';
 import { CategoryService } from './service/category.service';
 import { VerifyService } from './service/verify.service';
@@ -52,12 +56,14 @@ import { DialogService } from './service/dialog.service';
 import { DashboardService } from './service/dashboard.service';
 import { ImportService } from './service/import.service';
 import { ReportService } from './service/report.service';
+import { EventService } from './service/event.service';
 // AUTH SERVICE
 import { Auth } from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
 
 import { HttpService } from './service/http.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { EventComponent } from './module/event/event.component';
 
 
 @NgModule({
@@ -77,9 +83,12 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
     AdminComponent,
     CategoryComponent,
     BillComponent,
+    BillAddComponent,
     ReportComponent,
     ImportComponent,
     ChatComponent,
+    ProducerComponent,
+    EventComponent,
   ],
   imports: [
     HttpModule,
@@ -95,7 +104,10 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatSlideToggleModule,
     MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NoopAnimationsModule,
     AngularFontAwesomeModule,
     FormsModule,
@@ -112,8 +124,9 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
     
   ],
   entryComponents: [Dialog],
-  providers: [ImportService,ReportService,DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService],
+  providers: [EventService,ImportService,ProducerService,ReportService,DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService
+  ],
   bootstrap: [AppComponent],
-  exports: [MatButtonModule, MatCheckboxModule]
+  exports: [MatButtonModule, MatCheckboxModule,MatDatepickerModule]
 })
 export class AppModule { }

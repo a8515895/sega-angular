@@ -6,20 +6,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class ProductService {    
+export class ProducerService {    
     constructor(private _http: HttpService) {    
     }
-    getProduct(){
-        return this._http.get('getListProduct');
+    getProducer(){
+        return this._http.get('getListProducer');
     }
-    addProduct(data){
-        return this._http.post('addProduct',data);
+    addProducer(data){
+        return this._http.post('addProducer',data);
     }
-    updateProduct(data){
-        return this._http.put('updateProduct',data);
-    }
-    deleteProduct(data){
-        return this._http.delete('deleteProduct',data);
+    deleteProducer(data){
+        return this._http.delete('deleteProducer',data);
     }
     private extractData(res: Response) {
         let body = res.json();

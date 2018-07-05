@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
 export class DashboardService {    
     constructor(private _http: HttpService) {    
     }
-    getDashboard(){
-        return this._http.get('dashboard');
+    getDoanhThu(){
+        return this._http.get('getDoanhThu');
     }
 }

@@ -2,8 +2,8 @@ import { Component, OnInit,ViewContainerRef } from '@angular/core';
 import { VerifyService } from '../../../service/verify.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { CookieBackendService } from 'angular2-cookie/services/cookies.backend.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Socket } from 'ng-socket-io';
 
 @Component({
     selector: 'Login',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
         password : ''
     }
     disable = false;
-    constructor(vcr: ViewContainerRef,private _sv : VerifyService,private cookieService: CookieService,private route: ActivatedRoute,private router: Router,public toastr: ToastsManager) {
+    constructor(vcr: ViewContainerRef,private _sv : VerifyService,private cookieService: CookieService,private route: ActivatedRoute,private router: Router,public toastr: ToastsManager,public socket : Socket) {
         this.toastr.setRootViewContainerRef(vcr);
      }
     onSubmit(){
@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
         this._sv.login(this.model).then(
             res => {  
                 this.disable = false;
-                console.log(res);
                 if(res.status){
+                    this.socket.emit("has_login",{email : res.user.original.email});
                     this.cookieService.putObject('user',res.user);
                     this.cookieService.put('isLogin',res.access_token);   
                     this.cookieService.put('level',res.level);   
@@ -43,5 +43,5 @@ export class LoginComponent implements OnInit {
         if(this.cookieService.get('isLogin')){
             return this.router.navigate(['/login']);
         }
-     }
+    }
 }

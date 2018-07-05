@@ -1,145 +1,85 @@
 <div class="box-contain">
     <div class="box-header">Bill</div>
     <div class="box-content">
-        <div class="row h100">
-            <div class="col-md-7 h100 " style="padding : 10px">
-                <div class="h100"  style="border: 1px solid #ccc;border-radius : 4px;padding: 15px">
-                    <div class="row" style="margin-bottom: 15px">
-                        <div class="col-md-6">
-                            <button class="btn btn-danger" (click)="refreshBill()"><fa name="refresh"></fa> LÀM LẠI BILL</button>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="pull-right">
-                                <div class="form-group" style="display: inline-block;margin-right: 20px">
-                                    <label>Số bàn: </label>
-                                    <input type="number" #table/>
-                                </div>
-                                <button class="btn btn-success pull-right" (click)="successBill(table.value)"><fa name="check"></fa> HOÀN THÀNH BILL</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom: 15px;">
-                        <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="bill_code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mã hóa đơn </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.bill_code}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Trạng thái </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> 
                             <mat-form-field>
-                                <input matInput class="form-control" (keyup)="searchProduct($event)"  [matAutocomplete]="auto" [formControl]="stateCtrl"/>
-                                <mat-autocomplete #auto="matAutocomplete">
-                                    <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-                                        <img src="{{this.base_url}}/public/img/product/{{state.img}}" width="3%" />
-                                        <span>{{ state.name }}</span> | <span>{{ state.price }}</span>
-                                    </mat-option>
-                                </mat-autocomplete>
+                                <mat-select [(value)]="row.status" (change)="changeSelectStatus(row)">
+                                    <mat-option value="new">New</mat-option>
+                                    <mat-option value="open">Open</mat-option>
+                                    <mat-option value="pending">Pending</mat-option>
+                                    <mat-option value="solved">Solved</mat-option>
+                                </mat-select>
                             </mat-form-field>
-                        </div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="total">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tổng tiền </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.total | number}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="assign">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Agent </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.assign}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="customer">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tên khách hàng </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.customer}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.address}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Phone </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.phone}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="payment">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tình trạng </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> <mat-slide-toggle [checked]="row.payment == 0 ? false : true" (change)="updateStatusPayment(row.id,row.payment)"></mat-slide-toggle> </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="payment_type">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Hình thức </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.payment_type | titlecase}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="create_at">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Ngày tạo </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.create_at * 1000| date:'d/M/yyyy'}} </mat-cell>
+                    </ng-container>
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+                <div class="row">
+                    <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
+                        <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                            <fa name="trash"></fa>
+                        </button>
                     </div>
-                    <div class="row" style="margin-bottom: 15px;" *ngFor="let bill of currentBill">
-                        <div class="col-md-3"><img src="{{this.base_url}}/public/img/product/{{bill.img}}" width="15%" /></div>
-                        <div class="col-md-3">{{bill.name}}</div>
-                        <div class="col-md-3">{{bill.price}}</div>
-                        <div class="col-md-2"><input class="form-control" OnlyNumber="true" style="text-align: right;" type="number" value="1" (keyup)="changeQTYBill($event,bill)"/></div>
-                        <div class="col-md-1"><fa style="cursor: pointer;color : red" name="times-circle" size="2x" (click)="removeBill(bill)"></fa></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5 h100 " style="padding : 10px">
-                <div class="row" style="padding-top : 0;height: 50%;border: 1px solid #ccc;border-radius : 4px;">
-                    <div style="height: 5%;background: #d4d4d4;padding-left: 10px;font-weight: bold;color: #fff">
-                        Danh Sách Hóa Đơn Đang Xử Lý
-                    </div>                    
-                    <div style="padding: 10px;overflow-x: hidden;height: 95%;">
-                        <div style="height: 10%;">
-                            <input #searchTable type="number" placeholder="Số bàn" class="form-control" (keyup)="searchTables(searchTable.value)"/>
-                        </div>
-                        <div style="height: 90%;">
-                            <table class="table table-bordered table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Bàn số</th>
-                                        <th>Giá</th>
-                                        <th>Thanh toán</th>
-                                        <th>Ghi nợ</th>
-                                        <th>Hủy</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let bill of tmpNewBill" style="cursor:pointer">
-                                        <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.table}}</td>
-                                        <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.total | number}}</td>
-                                        <td>
-                                            <button class="btn btn-success" (click)="paymentSuccess(bill.id)">Đã thanh toán</button>
-                                        </td>
-                                        <td>
-                                            <input #deptName style="display: inline-block" placeholder="Tên người nợ"/>
-                                            <button class="btn btn-danger" (click)="paymentDebt(bill.id,deptName.value)">Nợ</button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-warning" (click)="paymentDestroy(bill.id)">Hủy</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Chi tiết hóa đơn</h4>
-                                    </div>
-                                    <div class="modal-body" style="height : 500px;overflow-x: hidden;">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <table class="table table-bordered table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Hình</th>
-                                                            <th>Tên</th>
-                                                            <th>Số lượng</th>
-                                                            <th>Giá</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr *ngFor="let pro of billDetail">
-                                                            <td>{{pro.id}}</td>
-                                                            <td><img src="{{this.base_url}}/public/img/product/{{pro.img}}" width="15%" /></td>
-                                                            <td>{{pro.name}}</td>
-                                                            <td>{{pro.qty | number}}</td>
-                                                            <td>{{pro.price | number}}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>             
-                <div class="row" style="padding-top : 0;height: calc(50% - 10px);border: 1px solid #ccc;border-radius : 4px;margin-top:10px;">
-                    <div style="height: 5%;background: #d4d4d4;padding-left: 10px;font-weight: bold;color: #fff">
-                        Danh Sách Sản Phẩm
-                    </div>
-                    <div style="padding: 10px;overflow-x: hidden;height: 95%;">
-                        <table class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên</th>
-                                    <th>Giá</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let pro of product">
-                                    <td>{{pro.id}}</td>
-                                    <td>{{pro.name}}</td>
-                                    <td>{{pro.price | number}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-md-6">
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
                     </div>
                 </div>
             </div>

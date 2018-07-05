@@ -3,7 +3,6 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { CategoryService } from '../../service/category.service';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
-import { ArrayType } from '@angular/compiler/src/output/output_ast';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { DialogService } from '../../service/dialog.service';
 @Component({
