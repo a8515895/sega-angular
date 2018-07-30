@@ -1,0 +1,255 @@
+<div class="box-contain" height="100%">
+    <div class="box-header">Customer</div>
+    <div class="box-content" >
+        <div class="row" >
+            <div class="col-md-12" style="position : relative">
+                <div style="position : absolute;height: 25px;width: 25px;cursor : pointer;color: #fff;text-align: center;line-height: 1.8;border-radius: 100%;background: #ccc;right : 5px;top : -10px">
+                    <fa name="minus"></fa>
+                </div>
+                <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;">
+                    <form (ngSubmit)="onSubmit($event)" #form="ngForm"> 
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                                Tên khách hàng*
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width : 100%">
+                                    <input matInput placeholder="Khách hàng" required maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
+                                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                        <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                        <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                    </mat-error>                                    
+                                </mat-form-field>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                                Email*
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width : 100%">
+                                    <input matInput placeholder="Email" required maxlength="60" id="email" name="email" [email]="true" [(ngModel)]="model.email" #email="ngModel" >
+                                    <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+                                        <span *ngIf=" email.errors.required">trường này không được trống</span>
+                                        <span *ngIf=" email.errors.email">không đúng dạng email</span>
+                                        <span *ngIf=" email.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                    </mat-error>                                    
+                                </mat-form-field>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                                Phone*
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width : 100%">
+                                    <input matInput placeholder="Phone" required maxlength="60" id="phone" name="phone" OnlyNumber="true" pattern="[0-9]*" [(ngModel)]="model.phone" #phone="ngModel" >
+                                    <mat-error *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+                                        <span *ngIf=" phone.errors.required">trường này không được trống </span>
+                                        <span *ngIf=" phone.errors.pattern">trường này không đúng định dạng </span>
+                                        <span *ngIf=" phone.errors.maxlength">nhìu nhất 60 ký tự </span>
+                                    </mat-error>                                    
+                                </mat-form-field>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                               Địa chỉ*
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field style="width : 100%">
+                                    <input matInput placeholder="Địa chỉ" required maxlength="60" id="address" name="address" [(ngModel)]="model.address" #address="ngModel" >
+                                    <mat-error *ngIf="address.invalid && (address.dirty || address.touched)">
+                                        <span *ngIf=" address.errors.required">trường này không được trống </span>
+                                        <span *ngIf=" address.errors.maxlength">nhìu nhất 60 ký tự </span>
+                                    </mat-error>                                    
+                                </mat-form-field>
+                            </div>
+                        </div>    
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                               Thành phố*
+                            </div>
+                            <div class="col-md-6" style="line-height: 4">
+                                <select2 [data]="select2Province"  [width]="300" #province (valueChanged)="selectProvinceChange($event)"></select2>
+                            </div>
+                        </div>         
+                        <div class="row">
+                            <div class="col-md-6 text-right" style="line-height: 4">
+                                Quận huyện*
+                            </div>
+                            <div class="col-md-6" style="line-height: 4">
+                                <select2 [data]="select2District" [width]="300" #district (valueChanged)="selectDistrictChange($event)"></select2>
+                            </div>
+                        </div>       
+                        <div class="row" style="margin-top : 10px">             
+                            <div class="col-md-6 col-md-offset-6">
+                                <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Khách hàng </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="phone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Phone </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.phone}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.address}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="district">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Quận </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.district}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="province">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Thành phố </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.province}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="create_by">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tạo bởi </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.create_by}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="create_at">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tạo lúc </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.create_at}} </mat-cell>
+                    </ng-container>
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);">
+                    </mat-row>
+                </mat-table>
+                <div class="row">
+                    <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
+                        <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                            <fa name="trash"></fa>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Thay đổi thông tin khách hàng</h4>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="onSubmit2($event)" #form2="ngForm">
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Tên khách hàng*
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width : 100%">
+                                <input matInput placeholder="Khách hàng" required maxlength="60" id="name" name="name" [(ngModel)]="updateModel.name" #name="ngModel" >
+                                <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                    <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                    <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                </mat-error>                                    
+                            </mat-form-field>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Email*
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width : 100%">
+                                <input matInput placeholder="Email" required maxlength="60" id="email" name="email" [email]="true" [(ngModel)]="updateModel.email" #email="ngModel" >
+                                <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+                                    <span *ngIf=" email.errors.required">trường này không được trống</span>
+                                    <span *ngIf=" email.errors.email">không đúng dạng email</span>
+                                    <span *ngIf=" email.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                </mat-error>                                    
+                            </mat-form-field>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Phone*
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width : 100%">
+                                <input matInput placeholder="Phone" required maxlength="60" id="phone" name="phone" OnlyNumber="true" pattern="[0-9]*" [(ngModel)]="updateModel.phone" #phone="ngModel" >
+                                <mat-error *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+                                    <span *ngIf=" phone.errors.required">trường này không được trống </span>
+                                    <span *ngIf=" phone.errors.pattern">trường này không đúng định dạng </span>
+                                    <span *ngIf=" phone.errors.maxlength">nhìu nhất 60 ký tự </span>
+                                </mat-error>                                    
+                            </mat-form-field>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Địa chỉ*
+                        </div>
+                        <div class="col-md-9">
+                            <mat-form-field style="width : 100%">
+                                <input matInput placeholder="Địa chỉ" required maxlength="60" id="address" name="address" [(ngModel)]="updateModel.address" #address="ngModel" >
+                                <mat-error *ngIf="address.invalid && (address.dirty || address.touched)">
+                                    <span *ngIf=" address.errors.required">trường này không được trống </span>
+                                    <span *ngIf=" address.errors.maxlength">nhìu nhất 60 ký tự </span>
+                                </mat-error>                                    
+                            </mat-form-field>
+                        </div>
+                    </div>    
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Thành phố*
+                        </div>
+                        <div class="col-md-9" style="line-height: 4">
+                            <select2 [data]="select2Province2" [width]="300" #province2 (valueChanged)="selectProvinceChange2($event)"></select2>
+                        </div>
+                    </div>         
+                    <div class="row">
+                        <div class="col-md-3 text-right" style="line-height: 4">
+                            Quận huyện*
+                        </div>
+                        <div class="col-md-9" style="line-height: 4">
+                            <select2 [data]="select2District2"  [width]="300" #district2 (valueChanged)="selectDistrictChange2($event)"></select2>
+                        </div>
+                    </div> 
+                <div class="row" style="margin-top : 10px">             
+                    <div class="col-md-6 col-md-offset-6" style="text-align: right">
+                        <button type="submit" class="btn btn-success" [disabled]="!form2.form.valid"><fa name="minus"></fa> Cập nhật</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

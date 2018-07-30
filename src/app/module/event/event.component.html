@@ -124,7 +124,7 @@
               </mat-table>
               <div class="row">
                   <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
-                      <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                      <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="right" (confirm)="clickTrash()">
                           <fa name="trash"></fa>
                       </button>
                   </div>
@@ -198,10 +198,20 @@
                             <textarea matInput placeholder="Miêu tả sự kiện" minlength="3" maxlength="250" id="description" name="description" [(ngModel)]="modelUpdate.description" #description="ngModel"></textarea>                                 
                         </mat-form-field>
                     </div>
-                </div>                    
+                </div>    
+                <div class="row" #div>
+
+                </div>  
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="border : 1px dashed #d4d4d4 ;height: 35px; cursor: pointer" (click)="addRowEvent()">
+                            <div style="width: 20px;height: 100%;padding: 5px;margin : auto"><fa style="color : #d4d4d4" name="plus"></fa></div>
+                        </div>
+                    </div>
+                </div>                
                 <div class="row" style="margin-top : 10px">             
                     <div class="col-md-6 col-md-offset-6">
-                        <button class="btn btn-primary" [disabled]="!form2.form.valid"><fa name="plus"></fa> Cập nhật lại</button>
+                        <button class="btn btn-primary pull-right" [disabled]="!form2.form.valid"><fa name="plus"></fa> Cập nhật lại</button>
                     </div>
                 </div>
             </form>

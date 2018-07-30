@@ -4,7 +4,6 @@ import { CategoryService } from '../../service/category.service';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { DialogService } from '../../service/dialog.service';
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -27,7 +26,7 @@ export class CategoryComponent implements OnInit {
     icon : ''
   }
   listAllCategoryParent = new Array();
-  constructor(private cookieService: CookieService,private cs : CategoryService,public toastr: ToastsManager, vcr: ViewContainerRef,public confirm:DialogService) {
+  constructor(private cookieService: CookieService,private cs : CategoryService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
   ngOnInit() {    

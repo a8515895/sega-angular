@@ -3,6 +3,8 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {SelectionModel} from '@angular/cdk/collections';
 import { ProductService } from '../../service/product.service';
+import { CustomerService } from '../../service/customer.service';
+import { AdminService } from '../../service/admin.service';
 import { BillService } from '../../service/bill.service';
 import {FormControl} from "@angular/forms";
 import BASE_URL from '../../global';
@@ -14,70 +16,68 @@ import {map} from 'rxjs/operators/map';
   templateUrl: './bill-add.component.html',
 })
 export class BillAddComponent implements OnInit {
+  options: Select2Options = {
+      multiple: true,
+      theme: 'classic',
+      closeOnSelect: true
+  };
+  test = 4;
+  kh = {
+    id : '',
+    name : '',
+    phone : '',
+    type : 'home',
+    address : '',
+    email : '',
+    priority : 4+'',
+    province : '',
+    district : '',
+    assign : this.cookieService.getObject('user')['original']['id'] + '',
+  }
+  totalPrice = 0;
+  province = new Array();
+  district = new Array();
   product = new Array();
+  customer = new Array();
+  admin = new Array();
   currentBill = new Array();
   newBill = new Array();
   tmpNewBill= new Array();
   billDetail = new Array();
   listBill = new Array();
   base_url : any = BASE_URL;
-  stateCtrl: FormControl;
   agent : String = this.cookieService.getObject('user')['original']['id'];
-  filteredStates: Observable<any[]>;
+  level : String = this.cookieService.getObject('user')['original']['level'];
   selection = new SelectionModel<Element>(true, []);
-  constructor(private ps : ProductService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
+  constructor(private ps : ProductService,private ads : AdminService,private cs : CustomerService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
   ngOnInit() {
-    this.getListProduct();
-    this.getListBill();
+    $(".selectTest").select2({width :  "100%"});
+    $(".selectTest2").select2({width :  "100%"});
+    $("#myModal2").removeAttr("tabindex");
     this.stateCtrl = new FormControl();
     this.filteredStates = this.stateCtrl.valueChanges.pipe(
       startWith(''),
       map(state => state ? this.filterStates(state) : this.product.slice())
     );
+    return Promise.all([
+      this.getListProduct(),
+      this.getListBill(),
+      this.getListCustomer(),
+      this.getListAdmin(),
+      this.getListProvince(),
+    ]);
+
   }
-  filterStates(name: string) {
-    return this.product.filter(state =>
-      state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
-  }
-  getListProduct(){
-    this.ps.getProduct().then(
-        res => {
-          this.product=res;
-        },
-        err => {
-            console.log(err);
-        }
-    )
-  }
-  getListBill(){
-    this.bs.getBillNew({status : 'new'}).then(
-      res => {        
-        this.newBill=res;
-        this.tmpNewBill=res;
-      },
-      err => {
-          console.log(err);
-      }
-    )
-  }
-  getListBillDetail(id){
-    this.billDetail = new Array();
-    this.bs.getBillDetail({id : id}).then(
-      res => {                
-        this.billDetail=res;
-      },
-      err => {
-          console.log(err);
-      }
-    )
-  }
+  // AUTOCOMPLETE PRODUCT
+  stateCtrl: FormControl;
+  filteredStates: Observable<any[]>;
   searchProduct($event){
     if($event.keyCode=="13"){
       let id =$event.target.value;
       let condition = "name";
-      if(id.length == 1 && Number.isInteger(Number(id))) condition = "id";
+      if(Number.isInteger(Number(id))) condition = "id";
       let check = false;
       let check2 = true;
       this.product.forEach(e=>{
@@ -98,6 +98,55 @@ export class BillAddComponent implements OnInit {
       if(check && check2) this.toastr.success("Thêm sản phẩm thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       $event.target.value = "";
     }
+  }  
+  filterStates(name: string) {
+    return this.product.filter(state =>
+      state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+  getListProduct(){
+    this.ps.getProduct().then(
+        res => {
+          this.product=res;
+        },
+        err => {
+        }
+    )
+  }
+  getListBill(){
+    this.bs.getBillNew({status : 'new'}).then(
+      res => {        
+        this.newBill=res;
+        this.tmpNewBill=res;
+      },
+      err => {
+      }
+    )
+  }
+  getListCustomer(){
+    this.cs.getCustomer().then(
+      res=>{
+        this.customer = res;
+        if(res.length > 0)
+        this.getListDetailCustomer(res[0].id);
+      }
+    )
+  }
+  getListAdmin(){
+    this.ads.getAdmin().then(
+      res=>{
+        this.admin = res;
+      }
+    )
+  }
+  getListBillDetail(id){
+    this.billDetail = new Array();
+    this.bs.getBillDetail({id : id}).then(
+      res => {                
+        this.billDetail=res;
+      },
+      err => {
+      }
+    )
   }
   refreshBill(){
     this.currentBill = new Array();
@@ -119,28 +168,63 @@ export class BillAddComponent implements OnInit {
   confirmBill(){
     if(this.currentBill.length != 0){
       $("#myModal2").modal("show");
+      this.totalPrice=0;
+      if(this.currentBill.length != 0){
+        this.currentBill.forEach(e=>{
+          this.totalPrice+=Number(e.price)*Number(e.qty);
+        })
+      }
     }else{
       this.toastr.warning("Không có sản phẩm nào");
     }
   }
   successBill(){
-    let data = {
-      detail : this.currentBill,
-      createBy : this.cookieService.getObject('user')['original']['id'],
-      total : 0,
-    }
-    this.currentBill.forEach(e=>{
-      data.total+=Number(e.price);
-    })
-    this.bs.addBill(data).then(res=>{
-      if(res.err==0){
-        this.currentBill=new Array();
-        this.getListBill();
-        this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+    if(this.currentBill.length != 0){
+      if(this.kh.name != '' && this.kh.phone != '' && this.kh.type !=''){
+        let data = {
+          name : this.kh.name,
+          phone : this.kh.phone,
+          type : this.kh.type,
+          detail : this.currentBill,
+          requester : this.kh.id,
+          province : this.kh.province,
+          district : this.kh.district,
+          address : this.kh.address,
+          email : this.kh.email,
+          assign : this.kh.assign,
+          createBy : this.cookieService.getObject('user')['original']['id'],
+          total : this.totalPrice,
+        }
+        this.bs.addBill(data).then(res=>{
+          if(res.err==0){
+            this.currentBill=new Array();
+            this.kh = {
+              id : '',
+              name : '',
+              phone : '',
+              type : '',
+              province : '',
+              district : '',
+              address : '',
+              email : '',
+              priority : 4+'',
+              assign : this.cookieService.getObject('user')['original']['id'] + '',
+            }
+            this.totalPrice=0;
+            $("#myModal2").modal("hide");
+            this.getListBill();
+            this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+          }else{
+            this.toastr.error(res.err,'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+          }
+        })
       }else{
-        this.toastr.error(res.err,'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+        this.toastr.warning("Thiếu các thông tin cần thiết");
       }
-    })
+    }else{
+      this.toastr.warning("Không có sản phẩm nào");
+    }
+
   }
   paymentSuccess(bill){
     let data = {
@@ -192,6 +276,52 @@ export class BillAddComponent implements OnInit {
       res =>{
         this.toastr.success("Cập nhật hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       } 
+    )
+  }
+  getListDetailCustomer(id){
+    this.cs.getDetailCustomer({id : id}).then(
+      res => {
+        this.kh = {
+          id : res.id,
+          name : res.name,
+          phone : res.phone,
+          address : res.address,
+          email : res.email,
+          type : 'home',
+          priority : 4+'',
+          province : res.provinceid,
+          district : res.districtid,
+          assign : this.cookieService.getObject('user')['original']['id'] + '',
+        }
+        console.log("Province",this.kh.province);
+        if(this.kh.province != ''){
+          console.log("Province2",this.kh.province);
+          this.getListDistrict();
+        }
+      }
+    )
+  }
+  getListProvince(){
+    this.cs.getProvince().then(
+        res => {
+          this.province = res;
+        },
+        err => {
+        }
+    )  
+  }
+  getListDistrict(){
+    console.log("District",this.kh.province)
+    let id = this.kh.province == "" ? "01" : this.kh.province;
+    console.log("District2",id)
+    this.cs.getDistrict({id : id}).then(
+        res => {
+            this.district = res;
+            this.kh.district = res[0].id;
+            console.log("District3",this.kh.district)
+        },
+        err => {
+        }
     )
   }
 }

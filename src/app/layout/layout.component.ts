@@ -15,6 +15,7 @@ import BASE_URL from '../global';
 export class LayoutComponent implements OnInit {
   isShowDropdown : boolean = false;
   isShowBill : boolean = false;
+  isShowImport : boolean = false;
   BASE_URL = BASE_URL;
   name : String;
   avartar : String = this.BASE_URL+'/public/img/avartar/'+this.cookie.getObject('user')['original']['avartar'];
@@ -25,10 +26,12 @@ export class LayoutComponent implements OnInit {
     product : true,
     producer : true,
     dashboard : true,
+    provider : true,
     import : true,
     report : true,
     chat : true,
     event : true,
+    customer : true,
   }
   constructor(private cookie : CookieService,private socket: Socket,private router: Router) { }
   ngOnInit() {
@@ -82,5 +85,11 @@ export class LayoutComponent implements OnInit {
   }
   mouseLeaveBill(){
     this.isShowBill = false;
+  }
+  mouseEnterImport(){
+    this.isShowImport = true;
+  }
+  mouseLeaveImport(){
+    this.isShowImport = false;
   }
 }

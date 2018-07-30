@@ -44,10 +44,11 @@
             <ul>
                 <li *ngIf="privilege.dashboard"><a routerLink="/dashboard" routerLinkActive="active-link"><fa name="dashboard"></fa> Dashboard</a></li>
                 <li *ngIf="privilege.chat"><a routerLink="/chat" routerLinkActive="active-link"><fa name="comments"></fa> Chat</a></li>
-                <li *ngIf="privilege.admin"><a routerLink="/admin" routerLinkActive="active-link"><fa name="users"></fa> Admin</a></li>
-                <li *ngIf="privilege.category"><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Category</a></li>
-                <li *ngIf="privilege.event"><a routerLink="/event" routerLinkActive="active-link"><fa name="calendar"></fa> Event</a></li>
-                <li *ngIf="privilege.producer"><a routerLink="/producer" routerLinkActive="active-link"><fa name="university"></fa> Producer</a></li>
+                <li *ngIf="privilege.admin"><a routerLink="/admin" routerLinkActive="active-link"><fa name="user-secret"></fa> Admin</a></li>
+                <li *ngIf="privilege.customer"><a routerLink="/customer" routerLinkActive="active-link"><fa name="users"></fa> Khách hàng</a></li>
+                <li *ngIf="privilege.category"><a routerLink="/category" routerLinkActive="active-link"><fa name="cubes"></fa> Thể Loại hàng</a></li>
+                <li *ngIf="privilege.event"><a routerLink="/event" routerLinkActive="active-link"><fa name="calendar"></fa> Sự kiện</a></li>
+                <li *ngIf="privilege.producer"><a routerLink="/producer" routerLinkActive="active-link"><fa name="university"></fa> Nhà sản xuất</a></li>
                 <li *ngIf="privilege.product"><a routerLink="/product" routerLinkActive="active-link"><fa name="database"></fa> Product</a></li>
                 <li *ngIf="privilege.bill" style="position: relative;z-index: 100" (mouseenter)="mouseEnterBill()" (mouseleave)="mouseLeaveBill()">
                     <a routerLink="/bill/add" routerLinkActive="active-link"><fa name="address-book"></fa> Bill</a>
@@ -60,7 +61,18 @@
                         </li>
                     </ul>
                 </li>
-                <li *ngIf="privilege.import"><a routerLink="/import" routerLinkActive="active-link"><fa name="download"></fa> Nhập hàng</a></li>
+                <li *ngIf="privilege.provider"><a routerLink="/provider" routerLinkActive="active-link"><fa name="building"></fa> Nhà cung cấp</a></li>
+                <li *ngIf="privilege.import" style="position: relative;z-index: 100" (mouseenter)="mouseEnterImport()" (mouseleave)="mouseLeaveImport()">
+                    <a routerLink="/import/add" routerLinkActive="active-link"><fa name="download"></fa> Nhập hàng</a>
+                    <ul *ngIf="isShowImport" style="width : 100%;margin: 0;padding: 0;position : absolute;left : 192px;top : 0">
+                        <li class="w100" style="background : #2374ac;cursor : pointer">
+                            <a routerLink="/import/add" routerLinkActive="active-link" style="font-size: 14px;font-weight: bold;line-height: 3;padding: 10px;color : #fff">Thêm phiếu nhập</a>
+                        </li>
+                        <li class="w100" style="background : #2374ac;cursor : pointer">
+                            <a routerLink="/import/list" routerLinkActive="active-link" style="font-size: 14px;font-weight: bold;line-height: 3;padding: 10px;color : #fff">Danh sách phiếu nhập</a>
+                        </li>
+                    </ul>
+                </li>
                 <li *ngIf="privilege.report">
                     <a routerLink="/report" routerLinkActive="active-link"><fa name="bar-chart"></fa> Báo cáo</a>
                 </li>

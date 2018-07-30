@@ -18,6 +18,8 @@ import * as $ from 'jquery';
   styleUrls: ['./bill.component.css']
 })
 export class BillComponent implements OnInit {
+  popoverTitle = "Bạn chắc mún xóa";
+  popoverMessage = "Xóa dữ liệu rất nguy hiểm"
   product = new Array();
   currentBill = new Array();
   newBill = new Array();
@@ -237,4 +239,17 @@ export class BillComponent implements OnInit {
       } 
     )
   }
+  clickTrash(){
+    if(this.selection.selected.length==0){
+        return this.toastr.error("Chưa select sản phẩm xóa",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+    }
+    let arrId = new Array;
+    this.selection.selected.forEach(e=>{
+      arrId.push(e.id);
+    })
+    this.bs.deleteBill(arrId).then(res=>{
+      this.toastr.warning("Xóa thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+      this.getListAllBill();
+    });
+}
 }

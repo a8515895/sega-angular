@@ -9,7 +9,22 @@ import 'rxjs/add/operator/catch';
 export class ImportService {    
     constructor(private _http: HttpService) {    
     }
-    getDashboard(){
-        return this._http.get('dashboard');
+    getImport(){
+        return this._http.get('getListAllImport');
+    }
+    getImportDetail(data){
+        return this._http.get('getListImportDetail',data);
+    }
+    getImportNew(data){
+        return this._http.get('getListImport',data);
+    }
+    addImport(data){
+        return this._http.post('addImport',data);
+    }
+    updateImport(data){
+        return this._http.put('updateImport',data);
+    }
+    deleteImport(data){
+        return this._http.delete('deleteImport',data);
     }
 }

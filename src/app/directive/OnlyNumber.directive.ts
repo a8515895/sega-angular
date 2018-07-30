@@ -7,8 +7,7 @@ export class OnlyNumber {
 
   constructor(private el: ElementRef) { }
 
-  @Input() OnlyNumber: boolean;
-
+  @Input() OnlyNumber: boolean;  
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     let e = <KeyboardEvent> event;
     if (this.OnlyNumber) {

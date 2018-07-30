@@ -158,85 +158,85 @@
     </div>
 </div>
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Update Product</h4>
-            </div>
-            <div class="modal-body">
-                <form (ngSubmit)="onSubmit2($event)" #form2="ngForm">
-                    <div class="row">
-                        <div class="col-md-3 text-right" style="line-height: 4">
-                            Sản phẩm*
-                        </div>
-                        <div class="col-md-9">
-                            <mat-form-field style="width : 100%">
-                                <input matInput placeholder="Product" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="update_model.name" #name="ngModel" >
-                                <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
-                                    <span *ngIf=" name.errors.required">trường này không được trống</span>
-                                    <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
-                                    <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                </mat-error>                                    
-                            </mat-form-field>
-                        </div>
-                    </div>                       
-                    <div class="row">
-                        <div class="col-md-3 text-right" style="line-height: 4">
-                            Price*
-                        </div>
-                        <div class="col-md-9">
-                            <mat-form-field style="width : 100%">
-                                <input type="number" required matInput placeholder="Price" minlength="3" maxlength="60" name="price" [(ngModel)]="update_model.price" #price="ngModel">
-                                <mat-error *ngIf="price.invalid && (price.dirty || price.touched)">
-                                    <span *ngIf=" price.errors.required">trường này không được trống</span>
-                                    <span *ngIf=" price.errors.minlength">ít nhất 3 ký tự</span>
-                                    <span *ngIf=" price.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                </mat-error> 
-                            </mat-form-field>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-md-3 text-right" style="line-height: 2">
-                            Chủ đề*
-                        </div>
-                        <div class="col-md-9">
-                            <select required [(ngModel)]="update_model.category" name="Chủ đề" class="form-control">
-                                <option value="">Chọn chủ đề</option>
-                                <option *ngFor="let i of listCategory" value="{{i.id}}">{{i.name}}</option>
-                            </select>
-                        </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Update Product</h4>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="onSubmit2($event)" #form2="ngForm">
+                <div class="row">
+                    <div class="col-md-3 text-right" style="line-height: 4">
+                        Sản phẩm*
                     </div>
-                    <div class="row" style="margin-top : 10px">
-                        <div class="col-md-3 text-right" style="line-height: 2">
-                            Nhà sản xuất*
-                        </div>
-                        <div class="col-md-9">
-                            <select required [(ngModel)]="update_model.producer" name="Nhà sản xuất" class="form-control">
-                                <option value="">Nhà sản xuất</option>
-                                <option *ngFor="let i of listProducer" value="{{i.id}}">{{i.name}}</option>
-                            </select>
-                        </div>
+                    <div class="col-md-9">
+                        <mat-form-field style="width : 100%">
+                            <input matInput placeholder="Product" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="update_model.name" #name="ngModel" >
+                            <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
+                                <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                            </mat-error>                                    
+                        </mat-form-field>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3 text-right" style="line-height: 4">
-                            Hình*
-                        </div>
-                        <div class="col-md-6" style="line-height: 4">
-                            <button type="button" class="btn btn-default" (click)="file2.click()">Chọn hình sản phảm</button>
-                            <input #file2 class="hide" type="file"  name="img" (change)="readUrl2($event)" accept=".jpg,.png">
-                        </div>
-                        <div class="col-md-3" style="line-height: 4;max-height : 350px;margin-top : 10px;overflow : hidden;padding : 0">
-                            <img *ngIf="fakeUrl2" [src]="fakeUrl2" width="100%">
-                        </div>
-                    </div>        
-                    <div class="row" style="margin-top : 10px">             
-                        <div class="col-md-6 col-md-offset-6" style="text-align: right">
-                            <button type="submit" class="btn btn-success" [disabled]="!form2.form.valid"><fa name="minus"></fa> Cập nhật</button>
-                        </div>
+                </div>                       
+                <div class="row">
+                    <div class="col-md-3 text-right" style="line-height: 4">
+                        Price*
                     </div>
-                </form>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+                    <div class="col-md-9">
+                        <mat-form-field style="width : 100%">
+                            <input type="number" required matInput placeholder="Price" minlength="3" maxlength="60" name="price" [(ngModel)]="update_model.price" #price="ngModel">
+                            <mat-error *ngIf="price.invalid && (price.dirty || price.touched)">
+                                <span *ngIf=" price.errors.required">trường này không được trống</span>
+                                <span *ngIf=" price.errors.minlength">ít nhất 3 ký tự</span>
+                                <span *ngIf=" price.errors.maxlength">nhìu nhất 60 ký tự</span>
+                            </mat-error> 
+                        </mat-form-field>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-3 text-right" style="line-height: 2">
+                        Chủ đề*
+                    </div>
+                    <div class="col-md-9">
+                        <select required [(ngModel)]="update_model.category" name="Chủ đề" class="form-control">
+                            <option value="">Chọn chủ đề</option>
+                            <option *ngFor="let i of listCategory" value="{{i.id}}">{{i.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin-top : 10px">
+                    <div class="col-md-3 text-right" style="line-height: 2">
+                        Nhà sản xuất*
+                    </div>
+                    <div class="col-md-9">
+                        <select required [(ngModel)]="update_model.producer" name="Nhà sản xuất" class="form-control">
+                            <option value="">Nhà sản xuất</option>
+                            <option *ngFor="let i of listProducer" value="{{i.id}}">{{i.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 text-right" style="line-height: 4">
+                        Hình*
+                    </div>
+                    <div class="col-md-6" style="line-height: 4">
+                        <button type="button" class="btn btn-default" (click)="file2.click()">Chọn hình sản phảm</button>
+                        <input #file2 class="hide" type="file"  name="img" (change)="readUrl2($event)" accept=".jpg,.png">
+                    </div>
+                    <div class="col-md-3" style="line-height: 4;max-height : 350px;margin-top : 10px;overflow : hidden;padding : 0">
+                        <img *ngIf="fakeUrl2" [src]="fakeUrl2" width="100%">
+                    </div>
+                </div>        
+                <div class="row" style="margin-top : 10px">             
+                    <div class="col-md-6 col-md-offset-6" style="text-align: right">
+                        <button type="submit" class="btn btn-success" [disabled]="!form2.form.valid"><fa name="minus"></fa> Cập nhật</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>

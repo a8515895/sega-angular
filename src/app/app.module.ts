@@ -17,11 +17,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 //PLUGIN
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { ChartModule } from 'angular-highcharts';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { Select2Module } from 'ng2-select2';
 const config: SocketIoConfig = { url: 'https://sega-group.com:3000', options: {secure: true} };
 //COMPONENT
 import { LayoutComponent} from './layout/layout.component';
@@ -37,22 +37,27 @@ import { BillComponent } from './module/bill/bill.component';
 import { BillAddComponent } from './module/bill/bill-add.component';
 import { ReportComponent } from './module/report/report.component';
 import { ImportComponent } from './module/import/import.component';
+import { ImportAddComponent } from './module/import/import-add.component';
 import { ChatComponent } from './module/chat/chat.component';
+import { CustomerComponent } from './module/customer/customer.component';
+import { ProviderComponent } from './module/provider/provider.component';
 import { ProducerComponent } from './module/producer/producer.component';
+import { EventComponent } from './module/event/event.component';
 
 // DIRECTIVE
 import {OnlyNumber} from './directive/OnlyNumber.directive';
 import {Confirm} from './directive/Confirm.directive';
 
 // DYNAMIC COMPONENT
-import { Dialog} from './dynamic/dialog/Dialog.component';
 // COMPONENT SERVICE
 import { ProductService } from './service/product.service';
+import { ProviderService } from './service/provider.service';
+import { AdminService } from './service/admin.service';
 import { ProducerService } from './service/producer.service';
 import { BillService } from './service/bill.service';
 import { CategoryService } from './service/category.service';
+import { CustomerService } from './service/customer.service';
 import { VerifyService } from './service/verify.service';
-import { DialogService } from './service/dialog.service';
 import { DashboardService } from './service/dashboard.service';
 import { ImportService } from './service/import.service';
 import { ReportService } from './service/report.service';
@@ -60,12 +65,12 @@ import { EventService } from './service/event.service';
 // AUTH SERVICE
 import { Auth } from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
-
 import { HttpService } from './service/http.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { EventComponent } from './module/event/event.component';
 
-
+export function cookieServiceFactory() {
+  return new CookieService();
+}
 @NgModule({
   declarations: [
     OnlyNumber,
@@ -73,7 +78,6 @@ import { EventComponent } from './module/event/event.component';
     LayoutComponent,
     AppComponent,
     ProductComponent,
-    Dialog,
     NotFoundComponent,
     LoginComponent,
     LogoutComponent,
@@ -88,10 +92,15 @@ import { EventComponent } from './module/event/event.component';
     ImportComponent,
     ChatComponent,
     ProducerComponent,
+    ProviderComponent,
+    CustomerComponent,
     EventComponent,
+    ImportAddComponent
   ],
   imports: [
+    BrowserModule,
     HttpModule,
+    HttpClientModule,
     ChartModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -110,11 +119,10 @@ import { EventComponent } from './module/event/event.component';
     MatNativeDateModule,
     NoopAnimationsModule,
     AngularFontAwesomeModule,
+    Select2Module,
     FormsModule,
     MatRadioModule,
-    NguiAutoCompleteModule,
     ReactiveFormsModule,
-    BrowserModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger'
     }),
@@ -122,9 +130,27 @@ import { EventComponent } from './module/event/event.component';
     SocketIoModule.forRoot(config) 
     // NgbModule.forRoot(),
     
+    
   ],
-  entryComponents: [Dialog],
-  providers: [EventService,ImportService,ProducerService,ReportService,DashboardService,ProductService,VerifyService,CookieService,HttpService,Auth,ifLogin,DialogService,CategoryService,BillService
+  entryComponents: [],
+  providers: [
+    EventService,
+    ProviderService,
+    AdminService,
+    ImportService,
+    CustomerService,
+    ProducerService,
+    ReportService,
+    DashboardService,
+    ProductService,
+    VerifyService,
+    CookieService,
+    HttpService,
+    Auth,
+    ifLogin,
+    CategoryService,
+    BillService,
+    { provide: CookieService, useFactory: cookieServiceFactory },
   ],
   bootstrap: [AppComponent],
   exports: [MatButtonModule, MatCheckboxModule,MatDatepickerModule]
