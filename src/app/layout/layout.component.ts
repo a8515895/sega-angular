@@ -1,7 +1,7 @@
-import { Component, OnInit,Renderer2,ElementRef } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { Socket } from 'ng-socket-io';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router} from '@angular/router';
 import * as jQuery from 'jquery';
 import BASE_URL from '../global';
 @Component({
@@ -71,7 +71,6 @@ export class LayoutComponent implements OnInit {
   NODE_is_seen(){
     this.socket.emit("is_seen",{total : true})
   }
-
   onHideDropdown(){
     this.isShowDropdown = false;    
   }
@@ -79,17 +78,5 @@ export class LayoutComponent implements OnInit {
     $event.preventDefault();
     $event.stopPropagation();
     this.isShowDropdown = true;
-  }
-  mouseEnterBill(){
-    this.isShowBill = true;
-  }
-  mouseLeaveBill(){
-    this.isShowBill = false;
-  }
-  mouseEnterImport(){
-    this.isShowImport = true;
-  }
-  mouseLeaveImport(){
-    this.isShowImport = false;
   }
 }

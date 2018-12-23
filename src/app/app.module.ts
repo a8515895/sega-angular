@@ -15,6 +15,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 //PLUGIN
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
@@ -117,6 +119,7 @@ export function cookieServiceFactory() {
     MatSortModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTooltipModule,
     NoopAnimationsModule,
     AngularFontAwesomeModule,
     Select2Module,

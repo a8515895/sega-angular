@@ -11,7 +11,7 @@ export class HttpService {
     headers : any;
     options : any;
     token : any;
-    baseUrl : string = 'https://laravel.sega-group.com/api/';
+    baseUrl : string = 'http://laravel.sega-group.com/api/';
     constructor(private http: Http,private cookieService: CookieService,private router : Router) {
 
     }

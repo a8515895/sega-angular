@@ -44,13 +44,13 @@
     overflow: hidden;    
 }
 .main-wrapper .left{
-    width : 10%;
+    width : 35px;
     background: #2374ac;
     height: 100%;
     float: left;
 }
 .main-wrapper .right{
-    width: 90%;
+    width: calc(100% - 35px);
     height: 100%;
     float: left;
     background: #e4e4e4;
@@ -63,7 +63,6 @@
     min-width: 150px;
 }
 .box-contain>.box-header{
-    padding: 10px;
     line-height: 3;
     min-height: 10%;
     border-top: 3px solid #ccc;
@@ -77,6 +76,8 @@
 }
 .left>ul>li{
     border-bottom: 1px solid #3181b6;
+    text-align : center;
+    height : 35px
 }
 .left>ul>li:hover{
     opacity: 0.7;
@@ -86,7 +87,6 @@
     font-size : 14px;
     font-weight: bold;
     line-height: 3;
-    padding: 10px;
 }
 .active-link{
     background: #fff;
