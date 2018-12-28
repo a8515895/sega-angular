@@ -40,26 +40,24 @@
                         </div> 
                         <div class="row">
                             <div class="col-md-6 text-right" style="line-height: 2">
-                                Chủ đề*
+                                Loại hàng*
                             </div>
                             <div class="col-md-6">
-                                <select required [(ngModel)]="model.category" name="Chủ đề" class="form-control">
-                                    <option value="">Chọn chủ đề</option>
-                                    <option *ngFor="let i of listCategory" value="{{i.id}}">{{i.name}}</option>
-                                </select>
+                                <mat-select required placeholder="Loại hàng" [(ngModel)]="model.category" name="category">
+                                    <mat-option [value]="i.id" *ngFor="let i of listCategory">{{i.name}}</mat-option> 
+                                </mat-select>
                             </div>
                         </div>
-                        <div class="row" style="margin-top : 10px">
+                        <!-- <div class="row" style="margin-top : 10px">
                             <div class="col-md-6 text-right" style="line-height: 2">
                                 Nhà sản xuất*
                             </div>
                             <div class="col-md-6">
-                                <select required [(ngModel)]="model.producer" name="Nhà sản xuất" class="form-control">
-                                    <option value="">Nhà sản xuất</option>
-                                    <option *ngFor="let i of listProducer" value="{{i.id}}">{{i.name}}</option>
-                                </select>
+                                <mat-select required placeholder="Nhà sản xuất" [(ngModel)]="model.producer" name="producer">
+                                    <mat-option [value]="i.id" *ngFor="let i of listProducer">{{i.name}}</mat-option> 
+                                </mat-select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-md-6 text-right" style="line-height: 4">
                                 Hình*
@@ -71,7 +69,10 @@
                             <div class="col-md-3" style="line-height: 4;max-height : 350px;margin-top : 10px;overflow : hidden;padding : 0">
                                 <img *ngIf="fakeUrl" [src]="fakeUrl" width="100%">
                             </div>
-                        </div>        
+                        </div>     
+                        <div #option>
+
+                        </div>   
                         <div class="row" style="margin-top : 10px">             
                             <div class="col-md-6 col-md-offset-6">
                                 <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
@@ -81,79 +82,76 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <mat-table [dataSource]="dataSource" matSort>
-                    <ng-container matColumnDef="select">
-                        <mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox (change)="$event ? masterToggle() : null"
-                                        [checked]="selection.hasValue() && isAllSelected()"
-                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
-                            </mat-checkbox>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <mat-checkbox (click)="$event.stopPropagation()"
-                                        (change)="$event ? selection.toggle(row) : null"
-                                        [checked]="selection.isSelected(row)">
-                            </mat-checkbox>
-                        </mat-cell>
-                    </ng-container>
-                    <!-- ID Column -->
-                    <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-                    </ng-container>
-                    <!-- Img Column -->
-                    <ng-container matColumnDef="img">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Hình </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> 
-                            <div style="max-height : 150px;max-width: 150px;overflow: hidden;">
-                                <img src="{{this.base_url}}/public/img/product/{{row.img}}" width="100%" />
-                            </div> 
-                        </mat-cell>
-                    </ng-container>                    
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Sản phẩm </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> 
-                            <span >{{row.name}}</span> 
-                        </mat-cell>
-                    </ng-container>
-                    <!-- Category Column -->
-                    <ng-container matColumnDef="category">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> 
-                                <span>{{row.category}}</span>
+        <div class="row" style="position : relative">
+            <div class="loading" *ngIf="isLoadingProduct" style="top : 100px;left : 50%">
+                <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+            </div>
+            <ng-template [ngIf]="!isLoadingProduct">
+                <div class="col-md-12">
+                    <mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                </mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(row) : null"
+                                            [checked]="selection.isSelected(row)">
+                                </mat-checkbox>
                             </mat-cell>
-                    </ng-container>
-                    <!-- Category Column -->
-                    <ng-container matColumnDef="producer">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nhà sản xuất </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> 
-                            <span>{{row.producer}}</span>
-                        </mat-cell>
-                    </ng-container>
-                    <!-- Color Column -->
-                    <ng-container matColumnDef="price">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Giá </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.price | number}} VND</mat-cell>
-                    </ng-container>
-                
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);">
-                    </mat-row>
-                </mat-table>
-                <div class="row">
-                    <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
-                        <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
-                            <fa name="trash"></fa>
-                        </button>
-                    </div>
-                    <div class="col-md-6">
-                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </ng-container>
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                        </ng-container>
+                        <!-- Img Column -->
+                        <ng-container matColumnDef="img">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Hình </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> 
+                                <div style="max-height : 150px;max-width: 150px;overflow: hidden;">
+                                    <img src="{{this.base_url}}/public/img/product/{{row.img}}" width="100%" />
+                                </div> 
+                            </mat-cell>
+                        </ng-container>                    
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Sản phẩm </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> 
+                                <span >{{row.name}}</span> 
+                            </mat-cell>
+                        </ng-container>
+                        <!-- Category Column -->
+                        <ng-container matColumnDef="category">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Loại hàng </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> 
+                                    <span>{{row.category}}</span>
+                                </mat-cell>
+                        </ng-container>
+                        <!-- Color Column -->
+                        <ng-container matColumnDef="price">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Giá </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.price | number}} VND</mat-cell>
+                        </ng-container>                
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);">
+                        </mat-row>
+                    </mat-table>
+                    <div class="row">
+                        <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
+                            <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                                <fa name="trash"></fa>
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ng-template>
         </div>
     </div>
 </div>
@@ -198,11 +196,11 @@
                 </div> 
                 <div class="row">
                     <div class="col-md-3 text-right" style="line-height: 2">
-                        Chủ đề*
+                        Loại hàng*
                     </div>
                     <div class="col-md-9">
-                        <select required [(ngModel)]="update_model.category" name="Chủ đề" class="form-control">
-                            <option value="">Chọn chủ đề</option>
+                        <select required [(ngModel)]="update_model.category" name="Loại hàng" class="form-control">
+                            <option value="">Chọn Loại hàng</option>
                             <option *ngFor="let i of listCategory" value="{{i.id}}">{{i.name}}</option>
                         </select>
                     </div>

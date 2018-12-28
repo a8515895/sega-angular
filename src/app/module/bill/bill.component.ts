@@ -122,6 +122,7 @@ export class BillComponent implements OnInit {
       $event.target.value = "";
     }
   }
+
   searchTables(table){
     let check = false;
     if(Number.isInteger(Number(table)) && table != "" && table != null){

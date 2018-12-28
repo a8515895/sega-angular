@@ -2,6 +2,7 @@ import { Component, OnInit,ViewChild,ViewContainerRef,ElementRef} from '@angular
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {SelectionModel} from '@angular/cdk/collections';
+import { FunctionService } from '../../service/function.service';
 import { ProductService } from '../../service/product.service';
 import { CustomerService } from '../../service/customer.service';
 import { AdminService } from '../../service/admin.service';
@@ -16,11 +17,6 @@ import {map} from 'rxjs/operators/map';
   templateUrl: './bill-add.component.html',
 })
 export class BillAddComponent implements OnInit {
-  options: Select2Options = {
-      multiple: true,
-      theme: 'classic',
-      closeOnSelect: true
-  };
   test = 4;
   kh = {
     id : '',
@@ -30,10 +26,12 @@ export class BillAddComponent implements OnInit {
     address : '',
     email : '',
     priority : 4+'',
-    province : '',
-    district : '',
+    province : '79',
     assign : this.cookieService.getObject('user')['original']['id'] + '',
   }
+  isLoadingProduct : boolean = true;
+  isLoadingBill : boolean = true;
+  selectKH = 0;
   totalPrice = 0;
   province = new Array();
   district = new Array();
@@ -45,11 +43,12 @@ export class BillAddComponent implements OnInit {
   tmpNewBill= new Array();
   billDetail = new Array();
   listBill = new Array();
+  addType = 0;
   base_url : any = BASE_URL;
   agent : String = this.cookieService.getObject('user')['original']['id'];
   level : String = this.cookieService.getObject('user')['original']['level'];
   selection = new SelectionModel<Element>(true, []);
-  constructor(private ps : ProductService,private ads : AdminService,private cs : CustomerService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
+  constructor(private fs : FunctionService,private ps : ProductService,private ads : AdminService,private cs : CustomerService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
   ngOnInit() {
@@ -98,6 +97,27 @@ export class BillAddComponent implements OnInit {
       if(check && check2) this.toastr.success("Thêm sản phẩm thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       $event.target.value = "";
     }
+  }
+  clickAddProduct(pro){
+    let check = false;
+    let check2 = true;
+    let id = pro.id;
+    this.product.forEach(e=>{
+      if(e['id'] == id){
+        this.currentBill.forEach(e2=>{
+          if(e2['id']==id) {
+            check2=false;
+            return;
+          }
+        })
+        check= true;
+        if(check2&&check) this.currentBill.push({id :e.id,name: e.name,price: e.price,img : e.img,qty : 1})
+        return;
+      }
+    })
+    if(!check)  this.toastr.error("Sản phẩm này ko tồn tại",'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+    if(!check2)  this.toastr.error("Sản phẩm này đã đc thêm",'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+    if(check && check2) this.toastr.success("Thêm sản phẩm thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
   }  
   filterStates(name: string) {
     return this.product.filter(state =>
@@ -107,6 +127,7 @@ export class BillAddComponent implements OnInit {
     this.ps.getProduct().then(
         res => {
           this.product=res;
+          this.isLoadingProduct = false;
         },
         err => {
         }
@@ -117,6 +138,7 @@ export class BillAddComponent implements OnInit {
       res => {        
         this.newBill=res;
         this.tmpNewBill=res;
+        this.isLoadingBill = false;
       },
       err => {
       }
@@ -126,8 +148,6 @@ export class BillAddComponent implements OnInit {
     this.cs.getCustomer().then(
       res=>{
         this.customer = res;
-        if(res.length > 0)
-        this.getListDetailCustomer(res[0].id);
       }
     )
   }
@@ -188,7 +208,6 @@ export class BillAddComponent implements OnInit {
           detail : this.currentBill,
           requester : this.kh.id,
           province : this.kh.province,
-          district : this.kh.district,
           address : this.kh.address,
           email : this.kh.email,
           assign : this.kh.assign,
@@ -202,16 +221,16 @@ export class BillAddComponent implements OnInit {
               id : '',
               name : '',
               phone : '',
-              type : '',
-              province : '',
-              district : '',
+              type : 'home',
               address : '',
               email : '',
               priority : 4+'',
+              province : '79',
               assign : this.cookieService.getObject('user')['original']['id'] + '',
             }
             this.totalPrice=0;
             $("#myModal2").modal("hide");
+            this.selectKH = 0;
             this.getListBill();
             this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
           }else{
@@ -278,28 +297,37 @@ export class BillAddComponent implements OnInit {
       } 
     )
   }
-  getListDetailCustomer(id){
-    this.cs.getDetailCustomer({id : id}).then(
-      res => {
-        this.kh = {
-          id : res.id,
-          name : res.name,
-          phone : res.phone,
-          address : res.address,
-          email : res.email,
-          type : 'home',
-          priority : 4+'',
-          province : res.provinceid,
-          district : res.districtid,
-          assign : this.cookieService.getObject('user')['original']['id'] + '',
+  getListDetailCustomer(){
+    let id = this.selectKH;
+    if(!this.fs.empty(id)){
+      this.cs.getDetailCustomer({id : id}).then(
+        res => {
+          this.kh = {
+            id : res.id,
+            name : res.name,
+            phone : res.phone,
+            address : res.address,
+            email : res.email,
+            type : 'home',
+            priority : 4+'',
+            province : res.provinceid,
+            assign : this.cookieService.getObject('user')['original']['id'] + '',
+          }
         }
-        console.log("Province",this.kh.province);
-        if(this.kh.province != ''){
-          console.log("Province2",this.kh.province);
-          this.getListDistrict();
-        }
+      )
+    }else{
+      this.kh = {
+        id : '',
+        name : '',
+        phone : '',
+        type : 'home',
+        address : '',
+        email : '',
+        priority : 4+'',
+        province : '79',
+        assign : this.cookieService.getObject('user')['original']['id'] + '',
       }
-    )
+    }
   }
   getListProvince(){
     this.cs.getProvince().then(
@@ -309,19 +337,5 @@ export class BillAddComponent implements OnInit {
         err => {
         }
     )  
-  }
-  getListDistrict(){
-    console.log("District",this.kh.province)
-    let id = this.kh.province == "" ? "01" : this.kh.province;
-    console.log("District2",id)
-    this.cs.getDistrict({id : id}).then(
-        res => {
-            this.district = res;
-            this.kh.district = res[0].id;
-            console.log("District3",this.kh.district)
-        },
-        err => {
-        }
-    )
   }
 }

@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
 import { HttpService } from '../service/http.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -9,7 +7,10 @@ import 'rxjs/add/operator/catch';
 export class DashboardService {    
     constructor(private _http: HttpService) {    
     }
-    getDoanhThu(){
-        return this._http.get('getDoanhThu');
+    getDoanhThuMonth(){
+        return this._http.get('getDoanhThuMonth');
+    }
+    getDoanhThuToday(){
+        return this._http.get('getDoanhThuToday');
     }
 }

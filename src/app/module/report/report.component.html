@@ -1,4 +1,27 @@
 <div class="box-contain">
-  <div class="box-header">Báo cáo</div>
-  <div class="box-content"></div>
+
+  <div class="box-header" style="height: 35px;line-height : 2">
+    Báo cáo
+    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn" (click)="getTimeToday()">Hôm nay</button>
+    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Hôm qua</button>
+    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần này</button>
+    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần trước</button>
+    <mat-form-field style="width: 100px;">
+      <input  matInput [matDatepicker]="picker1" [formControl]="date" (dateChange)="dateChange($event)" >
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>      
+  </div>
+  <div class="box-content" style="padding : 0">
+      <div class="row">
+        <div class="col-md-12" style="padding : 0">
+          <ul style="margin : 0;background: #2374ac">
+            <li class="bill-tab active">Doanh thu</li>
+            <li class="bill-tab">Hóa đơn</li>
+            <li class="bill-tab">Phiếu Nhập</li>
+            <li class="bill-tab">Sản phẩm</li>
+          </ul>
+        </div>
+      </div>
+  </div>
 </div>

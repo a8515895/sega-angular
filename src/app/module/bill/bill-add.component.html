@@ -1,10 +1,10 @@
 <div class="box-contain">
-    <div class="box-header">Bill Add</div>
+    <div class="box-header">Hóa đơn</div>
     <div class="box-content">
         <div class="row h100">
             <div class="col-md-7 h100 " style="padding : 10px">
-                <div class="h100"  style="border: 1px solid #ccc;border-radius : 4px;padding: 15px">
-                    <div class="row" style="margin-bottom: 15px">
+                <div class="h100"  style="border: 1px solid #155e90;border-radius : 4px;padding: 15px">
+                    <div class="row" style="margin-bottom: 5px;height : 5%">
                         <div class="col-md-6">
                             <button class="btn btn-danger" (click)="refreshBill()"><fa name="refresh"></fa> LÀM LẠI BILL</button>
                         </div>
@@ -14,7 +14,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 5px;height : 10%">
                         <div class="col-md-12">
                             <mat-form-field>
                                 <input style="box-shadow : none" placeholder="Tìm sản phẩm" matInput class="form-control" (keyup)="searchProduct($event)"  [matAutocomplete]="auto" [formControl]="stateCtrl"/>
@@ -27,7 +27,7 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div style="height: 640px;overflow-x: hidden; border: 1px solid #d4d4d4;padding: 10px;border-radius: 4px;">
+                    <div class="row" style="height: calc(85% - 15px);overflow-x: hidden; border: 1px solid #155e90;padding: 10px;border-radius: 4px;">
                         <div class="row" style="margin-bottom: 15px;" *ngFor="let bill of currentBill">
                             <div class="col-md-3"><img src="{{this.base_url}}/public/img/product/{{bill.img}}" width="15%" /></div>
                             <div class="col-md-3">{{bill.name}}</div>
@@ -39,10 +39,10 @@
                 </div>
             </div>
             <div class="col-md-5 h100 " style="padding : 10px">
-                <div class="row" style="padding-top : 0;height: 50%;border: 1px solid #ccc;border-radius : 4px;">
-                    <div style="height: 5%;background: #d4d4d4;padding-left: 10px;font-weight: bold;color: #fff">
-                        Danh Sách Hóa Đơn Đang Xử Lý
-                    </div>                    
+                <div class="row" style="padding-top : 0;height: 50%;border: 1px solid #155e90;border-radius : 4px;">                  
+                    <div class="loading" *ngIf="isLoadingBill">
+                        <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+                    </div>
                     <div style="padding: 10px;overflow-x: hidden;height: 95%;">
                         <div style="height: 100%;">
                             <table class="table table-bordered table-hover table-striped">
@@ -74,63 +74,61 @@
                             </table>
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Chi tiết hóa đơn</h4>
-                                    </div>
-                                    <div class="modal-body" style="height : 500px;overflow-x: hidden;">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <table class="table table-bordered table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Hình</th>
-                                                            <th>Tên</th>
-                                                            <th>Số lượng</th>
-                                                            <th>Giá</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr *ngFor="let pro of billDetail">
-                                                            <td>{{pro.id}}</td>
-                                                            <td><img src="{{this.base_url}}/public/img/product/{{pro.img}}" width="15%" /></td>
-                                                            <td>{{pro.name}}</td>
-                                                            <td>{{pro.qty | number}}</td>
-                                                            <td>{{pro.price | number}}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                    <div class="modal-content" style="height : 550px;">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Chi tiết hóa đơn</h4>
+                                        </div>
+                                        <div class="modal-body" style="height : 500px;overflow-x: hidden;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered table-hover table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Hình</th>
+                                                                <th>Tên</th>
+                                                                <th>Số lượng</th>
+                                                                <th>Giá</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let pro of billDetail">
+                                                                <td>{{pro.id}}</td>
+                                                                <td><img src="{{this.base_url}}/public/img/product/{{pro.img}}" width="15%" /></td>
+                                                                <td>{{pro.name}}</td>
+                                                                <td>{{pro.qty | number}}</td>
+                                                                <td>{{pro.price | number}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>             
-                <div class="row" style="padding-top : 0;height: calc(50% - 10px);border: 1px solid #ccc;border-radius : 4px;margin-top:10px;">
-                    <div style="height: 5%;background: #d4d4d4;padding-left: 10px;font-weight: bold;color: #fff">
-                        Danh Sách Sản Phẩm
+                <div class="row" style="position : relative;padding-top : 0;height: calc(50% - 10px);border: 1px solid #155e90;border-radius : 4px;margin-top:10px;">
+                    <div class="loading" *ngIf="isLoadingProduct">
+                        <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
                     </div>
                     <div style="padding: 10px;overflow-x: hidden;height: 95%;">
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Tên</th>
+                                    <th>Tên Sản Phẩm</th>
                                     <th>Giá</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let pro of product">
-                                    <td>{{pro.id}}</td>
-                                    <td>{{pro.name}}</td>
+                                <tr *ngFor="let pro of product" (click)="clickAddProduct(pro)">
+                                    <td><img src="{{this.base_url}}/public/img/product/{{pro.img}}" width="8%" /> {{pro.name}}</td>
                                     <td>{{pro.price | number}}</td>
                                 </tr>
                             </tbody>
@@ -144,103 +142,104 @@
 <div class="modal fade" id="myModal2" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Xác nhận lập hóa đơn</h4>
-        </div>
-        <div class="modal-body" style="height : 780px;overflow-x: hidden;">
-            <div class="row">
-                <div class="col-md-3">
-                    Khách hàng
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Xác nhận lập hóa đơn</h4>
+            </div>
+            <div class="modal-body" style="height : 400px;overflow-x: hidden;">
+                <div class="row">
+                    <div class="col-md-3">
+                        Khách hàng
+                    </div>
+                    <div class="col-md-9">
+                        <mat-form-field>
+                            <mat-select (change)="getListDetailCustomer()" [(ngModel)]="selectKH">
+                                <mat-option [value]="0">Khách hàng mới</mat-option> 
+                                <mat-option [value]="i.id" *ngFor="let i of customer">{{i.name}}</mat-option> 
+                            </mat-select>
+                        </mat-form-field>               
+                    </div>
                 </div>
-                <div class="col-md-9">
-                    <select class="form-control" class="selectTest">
-                        <option *ngFor="let i of customer" value="{{i.id}}">{{i.name}}</option>
-                    </select>                
+                <div class="row" *ngIf="level == '0'" style="margin-top : 10px">
+                    <div class="col-md-12">
+                        <mat-form-field>
+                            <mat-select placeholder="Nhân viên xử lý" required [(ngModel)]="kh.assign" >
+                                <mat-option value="{{i.id}}" *ngFor="let i of admin">{{i.name}}</mat-option> 
+                            </mat-select>
+                        </mat-form-field>               
+                    </div>
+                </div>
+                <div class="row">
+                    <mat-radio-group [(ngModel)]="addType">
+                        <mat-radio-button [value]="0">Thêm đơn giản</mat-radio-button>
+                        <mat-radio-button [value]="1">Thêm chi tiết</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field style="width : 100%">
+                            <input matInput placeholder="Tên người mua" required [(ngModel)]="kh.name" >                                   
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field style="width : 100%">
+                            <input OnlyNumber="true" matInput placeholder="Số điện thoại" required [(ngModel)]="kh.phone" >                                   
+                        </mat-form-field>
+                    </div>
+                </div>
+                <ng-template [ngIf]="addType == 1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-select placeholder="Khu vực" required [(ngModel)]="kh.province">
+                                    <mat-option *ngFor="let i of province" value="{{i.id}}">{{i.text}}</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field style="width : 100%">
+                                <input matInput placeholder="Địa chỉ" [(ngModel)]="kh.address" >                                   
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-select placeholder="Hình thức thanh toán" required [(ngModel)]="kh.type">
+                                    <mat-option value="home">Nhận tiền khi giao hàng</mat-option> 
+                                    <mat-option value="bank">Chuyển khoản ngân hàng</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field>
+                                <mat-select placeholder="Độ ưu tiên" required [(ngModel)]="kh.priority">
+                                    <mat-option value="1">Thấp </mat-option> 
+                                    <mat-option value="2">Bình thường</mat-option> 
+                                    <mat-option value="3">Cao</mat-option> 
+                                    <mat-option value="4">Khẩn cấp</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="row" style="margin-bottom: 15px;" *ngFor="let bill of currentBill">
+                    <div class="col-md-3"><img src="{{this.base_url}}/public/img/product/{{bill.img}}" width="15%" /></div>
+                    <div class="col-md-3">{{bill.name}}</div>
+                    <div class="col-md-3">{{bill.price | number}}</div>
+                    <div class="col-md-2">{{bill.qty}}</div>
+                    <div class="col-md-1"><fa style="cursor: pointer;color : red" name="times-circle" size="2x" (click)="removeBill(bill)"></fa></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <div style="font-weight: bold">Tổng tiền: {{totalPrice | number}}</div>
+                    </div>
                 </div>
             </div>
-            <div class="row" *ngIf="level == '0'" style="margin-top : 10px">
-                <div class="col-md-12">
-                    <mat-form-field>
-                        <mat-select placeholder="Nhân viên xử lý" required [(ngModel)]="kh.assign" >
-                            <mat-option value="{{i.id}}" *ngFor="let i of admin">{{i.name}}</mat-option> 
-                        </mat-select>
-                    </mat-form-field>               
-                </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="successBill()">Xác nhận</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field style="width : 100%">
-                        <input matInput placeholder="Tên người mua" required [(ngModel)]="kh.name" >                                   
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field style="width : 100%">
-                        <input OnlyNumber="true" matInput placeholder="Số điện thoại" required [(ngModel)]="kh.phone" >                                   
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field style="width : 100%">
-                        <input matInput placeholder="Email" required [(ngModel)]="kh.email" >                                   
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field style="width : 100%">
-                        <input matInput placeholder="Địa chỉ" required [(ngModel)]="kh.address" >                                   
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field>
-                        <mat-select placeholder="Hình thức thanh toán" required [(ngModel)]="kh.type">
-                            <mat-option value="home">Nhận tiền khi giao hàng</mat-option> 
-                            <mat-option value="bank">Chuyển khoản ngân hàng</mat-option> 
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field>
-                        <mat-select placeholder="Độ ưu tiên" required [(ngModel)]="kh.priority">
-                            <mat-option value="1">Thấp </mat-option> 
-                            <mat-option value="2">Bình thường</mat-option> 
-                            <mat-option value="3">Cao</mat-option> 
-                            <mat-option value="4">Khẩn cấp</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-md-6">
-                    <select class="form-control" class="selectTest" [(ngModel)]="kh.province">
-                        <option *ngFor="let i of province" value="{{i.id}}">{{i.text}}</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <select class="form-control" class="selectTest" [(ngModel)]="kh.district">
-                        <option *ngFor="let i of district" value="{{i.id}}">{{i.text}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row" style="margin-bottom: 15px;" *ngFor="let bill of currentBill">
-                <div class="col-md-3"><img src="{{this.base_url}}/public/img/product/{{bill.img}}" width="15%" /></div>
-                <div class="col-md-3">{{bill.name}}</div>
-                <div class="col-md-3">{{bill.price | number}}</div>
-                <div class="col-md-2">{{bill.qty}}</div>
-                <div class="col-md-1"><fa style="cursor: pointer;color : red" name="times-circle" size="2x" (click)="removeBill(bill)"></fa></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <div style="font-weight: bold">Tổng tiền: {{totalPrice | number}}</div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-                <button type="button" class="btn btn-success" (click)="successBill()">Xác nhận</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
         </div>
     </div>
 </div>    

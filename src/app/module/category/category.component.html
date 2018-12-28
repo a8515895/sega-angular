@@ -1,123 +1,113 @@
 <div class="box-contain">
     <div class="box-header">Chủ đề</div>
     <div class="box-content">
-        <div class="row">
-            <div class="col-md-12" style="position : relative">
-                <div style="position : absolute;height: 25px;width: 25px;cursor : pointer;color: #fff;text-align: center;line-height: 1.8;border-radius: 100%;background: #ccc;right : 5px;top : -10px">
-                    <fa name="minus"></fa>
-                </div>
-                <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;">
-                    <form (ngSubmit)="onSubmit()" #form="ngForm">
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 4">
-                                Chủ đề*
+        <div class="loading" *ngIf="isLoading" style="top : 100px;left : 50%">
+            <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+        </div>
+        <ng-template [ngIf]="!isLoading">
+            <div class="row">
+                <div class="col-md-12" style="position : relative">
+                    <div style="position : absolute;height: 25px;width: 25px;cursor : pointer;color: #fff;text-align: center;line-height: 1.8;border-radius: 100%;background: #ccc;right : 5px;top : -10px">
+                        <fa name="minus"></fa>
+                    </div>
+                    <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;">
+                        <form (ngSubmit)="onSubmit()" #form="ngForm">
+                            <div class="row">
+                                <div class="col-md-6 text-right" style="line-height: 4">
+                                    Chủ đề*
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field style="width : 100%">
+                                        <input matInput placeholder="Category" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
+                                        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                            <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                            <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
+                                            <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                        </mat-error>                                    
+                                    </mat-form-field>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width : 100%">
-                                    <input matInput placeholder="Category" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
-                                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
-                                        <span *ngIf=" name.errors.required">trường này không được trống</span>
-                                        <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
-                                        <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                    </mat-error>                                    
-                                </mat-form-field>
+                            <div class="row">
+                                <div class="col-md-6 text-right">
+                                    Chủ đề cha
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-select placeholder="Nhà cung cấp "  [(ngModel)]="model.parent" name="parent" >
+                                        <mat-option [value]="0">Chủ đề cha</mat-option> 
+                                        <mat-option [value]="i.id" *ngFor="let i of listAllCategoryParent">{{i.name}}</mat-option> 
+                                    </mat-select>
+                                </div>
+                            </div>       
+                            <div class="row" style="margin-top : 10px">             
+                                <div class="col-md-6 col-md-offset-6">
+                                    <button class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                                </div>
                             </div>
-                        </div>                      
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 4">
-                                Icon
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width : 100%">
-                                    <input matInput placeholder="Icon" minlength="3" maxlength="60" name="icon" [(ngModel)]="model.icon" #icon="ngModel">
-                                    <mat-error *ngIf="icon.invalid && (icon.dirty || icon.touched)">
-                                        <span *ngIf=" icon.errors.required">trường này không được trống</span>
-                                        <span *ngIf=" icon.errors.minlength">ít nhất 3 ký tự</span>
-                                        <span *ngIf=" icon.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                    </mat-error> 
-                                </mat-form-field>
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-md-6 text-right">
-                                Chủ đề cha
-                            </div>
-                            <div class="col-md-6">
-                                <select [(ngModel)]="model.parent" name="parent" class="form-control">
-                                    <option value="0">Chủ đề cha</option>
-                                    <option *ngFor="let i of listAllCategoryParent" value="{{i.id}}">{{i.name}}</option>
-                                </select>
-                            </div>
-                        </div>       
-                        <div class="row" style="margin-top : 10px">             
-                            <div class="col-md-6 col-md-offset-6">
-                                <button class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <mat-table [dataSource]="dataSource" matSort>
-                    <ng-container matColumnDef="select">
-                        <mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox (change)="$event ? masterToggle() : null"
-                                        [checked]="selection.hasValue() && isAllSelected()"
-                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
-                            </mat-checkbox>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <mat-checkbox (click)="$event.stopPropagation()"
-                                        (change)="$event ? selection.toggle(row) : null"
-                                        [checked]="selection.isSelected(row)">
-                            </mat-checkbox>
-                        </mat-cell>
-                    </ng-container>
-                    <!-- ID Column -->
-                    <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-                    </ng-container>                
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="toggleEdit($event,row,'name')"> 
-                            <span >{{row.name}}</span> 
-                            <mat-form-field class="hide">
-                                <input matInput value="{{row.name}}" (keyup)="toggleEdit($event,row,'name')">
-                            </mat-form-field>
-                        </mat-cell>
-                    </ng-container>
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="parent_name">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề cha </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> 
-                                <span>{{row.parent_name}}</span>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                </mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(row) : null"
+                                            [checked]="selection.isSelected(row)">
+                                </mat-checkbox>
                             </mat-cell>
-                    </ng-container>
-                    <!-- Color Column -->
-                    <ng-container matColumnDef="icon">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Icon </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.icon}} </mat-cell>
-                    </ng-container>
-                
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;">
-                    </mat-row>
-                </mat-table>
-                <div class="row">
-                    <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
-                        <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
-                            <fa name="trash"></fa>
-                        </button>
-                    </div>
-                    <div class="col-md-6">
-                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </ng-container>
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                        </ng-container>                
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề </mat-header-cell>
+                            <mat-cell *matCellDef="let row" (click)="toggleEdit($event,row,'name')"> 
+                                <span >{{row.name}}</span> 
+                                <mat-form-field class="hide">
+                                    <input matInput value="{{row.name}}" (keyup)="toggleEdit($event,row,'name')">
+                                </mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="parent_name">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Chủ đề cha </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> 
+                                    <span>{{row.parent_name}}</span>
+                                </mat-cell>
+                        </ng-container>
+                        <!-- Color Column -->
+                        <ng-container matColumnDef="icon">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Icon </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.icon}} </mat-cell>
+                        </ng-container>
+                    
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+                    <div class="row">
+                        <div class="col-md-6" style="padding: 3px 6px;background: #fff;line-height: 3;">
+                            <button class="btn btn-danger" mwlConfirmationPopover [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="bottom" (confirm)="clickTrash()">
+                                <fa name="trash"></fa>
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </ng-template>
     </div>
 </div>

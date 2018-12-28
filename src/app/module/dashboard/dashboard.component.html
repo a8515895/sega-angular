@@ -1,75 +1,85 @@
-<div  class="h100">
-  <div slimScroll class="row" height="1200px">
-    <div class="col-md-9 h100">
-      <div class="box-contain" style="height: 20%;">
+<div class="h100" style="overflow : auto;margin: 5px 0">
+  <div class="row">
+    <div class="col-md-12 h100">
+      <div class="box-contain" style="min-height: 80px;">
         <div class="box-header">Kết quả bán hàng hôm nay</div>
         <div class="box-content" >
-          <div class="row">          
-            <div class="col-md-3">
-              <div>
-                <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px"><fa name="usd" size="2x"></fa></div>
-                <div style="display: block;float:left;margin-left : 10px">
-                  <div><span>1</span> Hóa Đơn</div>
-                  <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">1.000.000</div>
-                  <div>Doanh thu</div>
+          <div class="row" style="position: relative">  
+            <div class="loading" *ngIf="isLoadingChartToday" style="top: 10px;left: 40%;">
+              <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+            </div>     
+            <ng-template [ngIf]="!isLoadingChartToday">   
+              <div class="col-md-3">
+                <div>
+                  <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px;line-height: 3.5;"><fa name="newspaper-o" size="2x"></fa></div>
+                  <div style="display: block;float:left;margin-left : 10px">
+                    <div><span style="font-size: 13px;font-weight: bold">{{numBill}}</span> Hóa Đơn</div>
+                    <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">{{total_bill_today | number}} VND</div>
+                    <div>Doanh thu</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-3">
-              <div>
-                <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px"><fa name="download" size="2x"></fa></div>
-                <div style="display: block;float:left;margin-left : 10px">
-                  <div><span>1</span> Nhập hàng</div>
-                  <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">1.000.000</div>
-                  <div>Số tiền</div>
+              <div class="col-md-3">
+                <div>
+                  <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px;line-height: 3.5;"><fa name="download" size="2x"></fa></div>
+                  <div style="display: block;float:left;margin-left : 10px">
+                    <div><span style="font-size: 13px;font-weight: bold">{{numImport}}</span> Nhập hàng</div>
+                    <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">{{total_impport_today | number}} VND</div>
+                    <div>Doanh thu</div>
+                  </div>
                 </div>
-              </div>
-            </div> 
-            <div class="col-md-3">
-              <div>
-                <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px"><fa name="usd" size="2x"></fa></div>
-                <div style="display: block;float:left;margin-left : 10px">
-                  <div>Doanh thu so với hôm qua</div>
-                  <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">1.000.000</div>
-                  <div>Doanh thu</div>
+              </div> 
+              <div class="col-md-3">
+                <div>
+                  <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px;line-height: 3.5;"><fa name="usd" size="2x"></fa></div>
+                  <div style="display: block;float:left;margin-left : 10px">
+                    <div>Doanh thu hôm nay</div>
+                    <div style="font-size: 18px;font-weight: bold;" [ngStyle]="{color : (total_bill_today <= 0) ? '#df3333' : 'rgb(14, 182, 159)'}">{{total_bill_today| number}} VND</div>
+                    <div>Doanh thu</div>
+                  </div>
                 </div>
-              </div>
-            </div> 
-            <div class="col-md-3">
-              <div>
-                <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px"><fa name="usd" size="2x"></fa></div>
-                <div style="display: block;float:left;margin-left : 10px">
-                  <div>Doanh thu so với tháng trước</div>
-                  <div style="font-size: 18px;font-weight: bold;color: rgb(14, 182, 159)">1.000.000</div>
-                  <div>Doanh thu</div>
+              </div> 
+              <div class="col-md-3">
+                <div>
+                  <div style="display: block;float:left;text-align: center;height: 45px;width: 45px;background: #dc6176;border-radius: 100%;color: #fff;padding : 8px;line-height: 3.5;"><fa name="usd" size="2x"></fa></div>
+                  <div style="display: block;float:left;margin-left : 10px">
+                    <div>Doanh thu tháng này</div>
+                    <div style="font-size: 18px;font-weight: bold;" [ngStyle]="{color : (total_bill_month <= 0) ? '#df3333' : 'rgb(14, 182, 159)'}">{{total_bill_month| number}} VND</div>
+                    <div>Doanh thu</div>
+                  </div>
                 </div>
-              </div>
-            </div>           
+              </div>  
+            </ng-template>         
           </div>
         </div>
       </div>
-      <div class="box-contain" style="height: 40%;margin-top : 10px;">
-          <div class="box-header">Doanh thu tháng này</div>
+      <div class="box-contain" style="height: 450px;margin-top : 10px;position: relative;">
+          <div class="box-header">Doanh thu hôm nay</div>
           <div class="box-content" >
-            <div class="row">          
+            <div class="row" style="position: relative">  
+              <div class="loading" *ngIf="isLoadingChartToday" style="left : 50%">
+                  <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+              </div>         
               <div class="col-md-12">
-                  <div [chart]="chart"></div>
+                  <div [chart]="chartToday"></div>
               </div>       
             </div>
           </div>
       </div>
-      <div class="box-contain" style="height: calc(40% - 20px);margin-top : 10px;">
-          <div class="box-header">Doanh thu tháng này</div>
+      <div class="box-contain" style="height: 450px;margin-top : 10px;position: relative;">
+          <div class="box-header">Doanh thu tháng này </div>
           <div class="box-content" >
-            <div class="row">          
-              <div class="col-md-12">
-                  <div [chart]="chart"></div>
+            <div class="row" style="position: relative">  
+              <div class="loading" style="left : 50%" *ngIf="isLoadingChartMonth">
+                  <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+              </div>         
+              <div class="col-md-12" >
+                  <div [chart]="chartMonth"></div>
               </div>       
             </div>
           </div>
       </div>
     </div>
-    <div class="col-md-3"></div>
   </div>
 </div>
 

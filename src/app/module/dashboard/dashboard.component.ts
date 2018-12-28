@@ -11,28 +11,40 @@ import { Chart } from 'angular-highcharts';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  total_bill : Number;
-  chart : any;  
+  total_bill_today : Number;
+  total_impport_today : Number;
+  total_bill_month : Number;
+  isLoadingChartToday : boolean = true;
+  isLoadingChartMonth : boolean = true;
+  chartToday : any;  
+  chartMonth : any; 
+  numBill : number;
+  numImport : number;
   constructor(private elementRef: ElementRef,private ds : DashboardService,private cookie : CookieService,private ps : ProductService,private bs : BillService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
     this.toastr.setRootViewContainerRef(vcr);
   }
-
   ngOnInit() {
-    this.getDoanhThu();
-    this.createChart();
+    this.getDoanhThuToday();
+    this.getDoanhThuMonth();
   }
- 
   timeout(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(() => resolve(), ms));
   }
-
-  getDoanhThu(){
-    this.ds.getDoanhThu().then(res=>{
+  getDoanhThuToday(){
+    this.ds.getDoanhThuToday().then(res=>{
       let total = new Array;
+      let categories = new Array;
+      this.numImport = res.numImport;
+      this.numBill = res.numBill;
+      this.total_impport_today = res.import_today;
+      console.log(res);
       Object.keys(res.bill).forEach((e)=>{
+        categories.push(`${e} giờ`);
         total.push(Number(res.bill[e])-Number(res.import[e]));
       })
-      this.chart = new Chart({
+      this.total_bill_today = res.doanhthu_today;
+      this.total_bill_month = res.doanhthu_month;
+      this.chartToday = new Chart({
         chart: {
           type: 'column'
         },
@@ -40,13 +52,53 @@ export class DashboardComponent implements OnInit {
           text: null
         },
         xAxis: {
-          categories: Object.keys(res.bill)
+          categories: categories
         },    
         yAxis: {
           title: null,
         },
         credits: {
           enabled: false
+        },
+        legend : {
+          enabled : false,
+        },
+        series: [
+          {
+            name : "Giờ",
+            data: total,
+          }
+        ]
+      });
+      this.isLoadingChartToday = false;
+    })
+  }
+  getDoanhThuMonth(){
+    this.ds.getDoanhThuMonth().then(res=>{
+      let total = new Array;
+      let categories = new Array;
+      Object.keys(res.bill).forEach((e)=>{
+        categories.push(`Ngày ${e}`);
+        total.push(Number(res.bill[e])-Number(res.import[e]));
+      })
+      this.chartMonth = new Chart({
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: null
+        },
+        xAxis: {
+          categories: categories
+        },    
+        yAxis: {
+          title: null,
+        },
+        credits: {
+          enabled: false
+        },
+        legend : {
+          enabled : false,
         },
         series: [
           {
@@ -55,9 +107,8 @@ export class DashboardComponent implements OnInit {
           }
         ]
       });
-    })
-  }
-  createChart(){
+      this.isLoadingChartMonth = false;
 
+    })
   }
 }

@@ -16,6 +16,7 @@ export class CategoryComponent implements OnInit {
   public popoverTitle: string = 'Bạn có chắc muốn xóa ???';
   public popoverMessage: string = 'Xóa tiêu đề sẽ xóa các sản phẩm liên quan';
   public showSpanName = true;
+  isLoading : boolean = true;
   dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<Element>(true, []);
   value = 50;
@@ -44,6 +45,7 @@ export class CategoryComponent implements OnInit {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.isLoading = false;
       },
       err => {
           console.log(err);

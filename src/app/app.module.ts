@@ -23,6 +23,7 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { ChartModule } from 'angular-highcharts';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+
 import { Select2Module } from 'ng2-select2';
 const config: SocketIoConfig = { url: 'https://sega-group.com:3000', options: {secure: true} };
 //COMPONENT
@@ -64,6 +65,7 @@ import { DashboardService } from './service/dashboard.service';
 import { ImportService } from './service/import.service';
 import { ReportService } from './service/report.service';
 import { EventService } from './service/event.service';
+import { FunctionService } from './service/function.service';
 // AUTH SERVICE
 import { Auth } from './auth.guard';
 import { ifLogin } from './ifLogin.guard';
@@ -126,6 +128,7 @@ export function cookieServiceFactory() {
     FormsModule,
     MatRadioModule,
     ReactiveFormsModule,
+    
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger'
     }),
@@ -149,6 +152,7 @@ export function cookieServiceFactory() {
     VerifyService,
     CookieService,
     HttpService,
+    FunctionService,
     Auth,
     ifLogin,
     CategoryService,

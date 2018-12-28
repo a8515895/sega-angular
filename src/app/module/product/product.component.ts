@@ -17,7 +17,8 @@ export class ProductComponent implements OnInit {
     fakeUrl : any;
     fakeUrl2 : any;
     base_url : any = BASE_URL;
-    displayedColumns = ['select','id','img', 'name','category','producer', 'price'];
+    isLoadingProduct : boolean = true;
+    displayedColumns = ['select','id','img', 'name','category', 'price'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     public popoverTitle: string = 'Bạn có chắc muốn xóa ???';
@@ -32,13 +33,13 @@ export class ProductComponent implements OnInit {
         category : '',
         name : '',
         price : '',
-        producer : '',
         create_by: this.cookieService.getObject('user')['original']['id'],
         img: {
             name : "",
             value : "",
             type : ""
-        },        
+        },
+        option : "",        
     }
     update_model={
         id : '',
@@ -68,7 +69,7 @@ export class ProductComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(res);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
-                console.log(this.product);
+                this.isLoadingProduct = false;
             },
             err => {
                 console.log(err);
@@ -141,13 +142,13 @@ export class ProductComponent implements OnInit {
                         category : '',
                         name : '',
                         price : '',
-                        producer : '',
                         create_by: this.cookieService.getObject('user')['original']['id'],
                         img: {
                             name : "",
                             value : "",
                             type : ""
-                        },        
+                        },  
+                        option : ""      
                     }
                     this.fakeUrl = "";
                     this.getListProduct();
@@ -161,7 +162,6 @@ export class ProductComponent implements OnInit {
         }else{
             this.toastr.error("Thiếu hình sản phẩm",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
         }
-
     }
     onSubmit2($event){
         $('#myModal').modal('hide');
@@ -197,11 +197,11 @@ export class ProductComponent implements OnInit {
         }
         let arrId = new Array;
         this.selection.selected.forEach(e=>{
-          arrId.push(e.id);
+            arrId.push(e.id);
         })
         this.ps.deleteProduct(arrId).then(res=>{
-          this.toastr.warning("Xóa thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
-          this.getListProduct();
+            this.toastr.warning("Xóa thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+            this.getListProduct();
         });
     }
     editRow(row){
