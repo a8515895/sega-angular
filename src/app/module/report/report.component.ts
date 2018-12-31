@@ -1,39 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
+import { Subject }    from 'rxjs';
 import {FormControl} from '@angular/forms';
+import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import { AppDateAdapter, APP_DATE_FORMATS} from '../../date.adapter';
+import { ReportService }     from '../../service/report.service';
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
-  styleUrls: ['./report.component.css']
+  styleUrls: ['./report.component.css'],
+  providers: [
+    ReportService,
+    {
+      provide: DateAdapter, useClass: MomentDateAdapter
+    },
+    {
+        provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+    }
+  ],
 })
 export class ReportComponent implements OnInit {
-  daterangepickerOptions = {
-    format: 'DD/MM/YYYY',
-    showRanges : false,
-    ranges: {
-			'Hôm nay': [moment(), moment()],
-			'Hôm qua': [moment().subtract(1,"days"), moment().subtract(1,"days")],
-			'Tuần này': [moment().isoWeekday(1), moment().isoWeekday(7)],
-			'Tuần trước': [moment().weekday(-6), moment().weekday(0)],
-			'Tháng này': [moment().startOf('month'), moment().endOf('month')],
-			'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-			'Năm này': [moment().startOf('year'), moment().endOf('year')],
-			'Năm trước': [moment().subtract(1,"year").startOf('year'), moment().subtract(1, 'year').endOf('year')]
-    },
-  }
-  date = new FormControl(new Date());
+  date = new FormControl(moment([2017, 0, 1]));
+  parentSubject:Subject<any> = new Subject();
   constructor() { }
   ngOnInit() {
-    console.log(moment());
   }
   dateChange($event){
-    console.log($event.value.getDate());
-    console.log($event.value.getMonth());
-    console.log($event.value.getYear());
-    console.log($event);
+    this.parentSubject.next($event.targetElement.value);
   }
-  // dateChange(){
-  //   console.log(moment())
-  // }
 }

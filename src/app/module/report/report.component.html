@@ -2,15 +2,22 @@
 
   <div class="box-header" style="height: 35px;line-height : 2">
     Báo cáo
-    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn" (click)="getTimeToday()">Hôm nay</button>
-    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Hôm qua</button>
-    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần này</button>
-    <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần trước</button>
-    <mat-form-field style="width: 100px;">
-      <input  matInput [matDatepicker]="picker1" [formControl]="date" (dateChange)="dateChange($event)" >
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>      
+    <div class="pull-right">
+      <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn" (click)="getTimeToday()">Hôm nay</button>
+      <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Hôm qua</button>
+      <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần này</button>
+      <button style="padding: 2px;border-radius: 4px;font-size : 10px" class="btn">Tuần trước</button>
+      <mat-form-field style="width: 100px;">
+        <input  matInput [matDatepicker]="picker1" (dateChange)="dateChange($event)" [formControl]="date" placeholder="Từ ngày" >
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker disabled="false" #picker1></mat-datepicker>
+      </mat-form-field>      
+      <mat-form-field style="width: 100px;">
+          <input  matInput [matDatepicker]="picker2" (dateChange)="dateChange($event)" [formControl]="date" placeholder="Đến ngày" >
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker disabled="false" #picker2></mat-datepicker>
+      </mat-form-field>  
+    </div>
   </div>
   <div class="box-content" style="padding : 0">
       <div class="row">
@@ -22,6 +29,9 @@
             <li class="bill-tab">Sản phẩm</li>
           </ul>
         </div>
+      </div>
+      <div class="row">
+        <reportDetail  [parentSubject]="parentSubject"></reportDetail>
       </div>
   </div>
 </div>

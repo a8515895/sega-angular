@@ -39,6 +39,7 @@ import { CategoryComponent } from './module/category/category.component';
 import { BillComponent } from './module/bill/bill.component';
 import { BillAddComponent } from './module/bill/bill-add.component';
 import { ReportComponent } from './module/report/report.component';
+import { ReportDetailComponent } from './module/report/report_detail.component';
 import { ImportComponent } from './module/import/import.component';
 import { ImportAddComponent } from './module/import/import-add.component';
 import { ChatComponent } from './module/chat/chat.component';
@@ -93,6 +94,7 @@ export function cookieServiceFactory() {
     BillComponent,
     BillAddComponent,
     ReportComponent,
+    ReportDetailComponent,
     ImportComponent,
     ChatComponent,
     ProducerComponent,

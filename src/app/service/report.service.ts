@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { HttpService } from '../service/http.service';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Subject }    from 'rxjs';
 
 @Injectable()
 export class ReportService {    
-    constructor(private _http: HttpService) {    
+    private missionAnnouncedSource = new Subject<string>();
+    missionAnnounced$ = this.missionAnnouncedSource.asObservable();
+    constructor() {    
     }
-    getDashboard(){
-        return this._http.get('dashboard');
+    announceMission(mission: string) {
+        this.missionAnnouncedSource.next(mission);
     }
 }
