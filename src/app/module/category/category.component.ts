@@ -23,7 +23,7 @@ export class CategoryComponent implements OnInit {
   model = {
     parent : 0,
     name : '',
-    create_by: this.cookieService.getObject('user')['original']['id'],
+    create_by: this.cookieService.getObject('user')['id'],
     icon : ''
   }
   listAllCategoryParent = new Array();
@@ -60,7 +60,7 @@ export class CategoryComponent implements OnInit {
           this.model = {
             parent : 0,
             name : '',
-            create_by: this.cookieService.getObject('user')['original']['id'],
+            create_by: this.cookieService.getObject('user')['id'],
             icon : ''
           }
           this.getListCategory();
@@ -92,7 +92,7 @@ export class CategoryComponent implements OnInit {
     });
   }
   toggleEdit($event,data,type){
-    console.log($event);
+    
     if($event.type == "click"){
       let span = $event.currentTarget.children[0];
       let input = $event.currentTarget.children[1];
@@ -104,7 +104,7 @@ export class CategoryComponent implements OnInit {
       if($event.keyCode == 13){
         let input = $event.target.value;
         if(type == 'name') data['name'] = input;
-        data['update_by']=this.cookieService.getObject('user')['original']['id'];
+        data['update_by']=this.cookieService.getObject('user')['id'];
         this.cs.updateCategory(data).then(res=>{
           if(res.err == 0){
             this.getListCategory();

@@ -12,14 +12,14 @@ import BASE_URL from '../../global';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  avartar : string = this.cookie.getObject('user')['original']['avartar'];
+  avartar : string = this.cookieService.getObject('user')['avartar'];
   @ViewChild('listCustomer') ul:ElementRef;
   @ViewChild('displayMess') div:ElementRef;
   product : any = new Array();
   BASE_URL = BASE_URL;
-  constructor(private socket: Socket,private renderer: Renderer2,private elementRef: ElementRef,private cookie : CookieService,private ps : ProductService,private bs : BillService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
+  constructor(private socket: Socket,private renderer: Renderer2,private elementRef: ElementRef,private cookieService : CookieService,private ps : ProductService,private bs : BillService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
     this.toastr.setRootViewContainerRef(vcr);
-    console.log(this.cookie.getObject('user')['original']);
+    console.log(this.cookieService.getObject('user'));
     
 
   }
@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
     this.NODE_agent_send_message();
     this.NODE_customer_leave();
     this.NODE_is_seen();
-    this.socket.emit("list_room",{email : this.cookie.getObject('user')['original']['email']});
+    this.socket.emit("list_room",{email : this.cookieService.getObject('user')['email']});
     this.socket.on("list_room",(data)=>{
       data.forEach((e)=>{
         let li2 = document.createElement("li");
@@ -51,7 +51,7 @@ export class ChatComponent implements OnInit {
         li2.onclick = this.chooseUser;
         this.renderer.appendChild(this.ul.nativeElement,li2);  
         this.renderer.listen(li2,"click",()=>{
-          this.socket.emit("is_seen",{status : true,room : e.name,email : this.cookie.getObject('user')['original']['email']});
+          this.socket.emit("is_seen",{status : true,room : e.name,email : this.cookieService.getObject('user')['email']});
         });
         let li3 = document.createElement("div");
         li3.className = 'closeUser';
@@ -91,7 +91,7 @@ export class ChatComponent implements OnInit {
                     </a>
                   </div>
                   <div class="media-body chat-body">
-                    <h4 class="media-heading">${this.cookie.getObject('user')['original']['name']}</h4>
+                    <h4 class="media-heading">${this.cookieService.getObject('user')['name']}</h4>
                     <p>${e.message}</p>
                   </div>
                 </div>
@@ -138,7 +138,7 @@ export class ChatComponent implements OnInit {
         li2.onclick = this.chooseUser;
         this.renderer.appendChild(this.ul.nativeElement,li2);  
         this.renderer.listen(li2,"click",()=>{
-          this.socket.emit("is_seen",{status : true,room : data.room,email : this.cookie.getObject('user')['original']['email']});
+          this.socket.emit("is_seen",{status : true,room : data.room,email : this.cookieService.getObject('user')['email']});
         });
         let li3 = document.createElement("div");
         li3.className = 'closeUser';
@@ -157,7 +157,7 @@ export class ChatComponent implements OnInit {
       }else{
         jQuery(`.list-user[room='${data.room}'] .last-chat`).html(data.data);
         if(!jQuery(`.list-user[room='${data.room}']`).hasClass('activeChat')){
-          this.socket.emit("is_seen",{status : false,room : data.room,email : this.cookie.getObject('user')['original']['email']});
+          this.socket.emit("is_seen",{status : false,room : data.room,email : this.cookieService.getObject('user')['email']});
         }
         let contentChat=this.div.nativeElement.children;
         Object.keys(contentChat).forEach(e => {
@@ -201,7 +201,7 @@ export class ChatComponent implements OnInit {
                       </a>
                     </div>
                     <div class="media-body chat-body">
-                      <h4 class="media-heading">${this.cookie.getObject('user')['original']['name']}</h4>
+                      <h4 class="media-heading">${this.cookieService.getObject('user')['name']}</h4>
                       <p>${data.data}</p>
                     </div>
                   </div>
@@ -240,7 +240,7 @@ export class ChatComponent implements OnInit {
     jQuery(`.list-user[room='${room}']`).remove(); 
   }
   sendMessage(message,room){
-    this.socket.emit("agent_send_message",{room:room,data:message,agent : {avartar : this.cookie.getObject('user')['original']['avartar'],name : this.cookie.getObject('user')['original']['name']}});
+    this.socket.emit("agent_send_message",{room:room,data:message,agent : {avartar : this.cookieService.getObject('user')['avartar'],name : this.cookieService.getObject('user')['name']}});
   }
   chooseUser(event){
     if(!event.currentTarget.classList.contains('activeChat')){

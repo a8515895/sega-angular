@@ -38,7 +38,7 @@ export class ProviderComponent implements OnInit {
         address : '',
         district : '001',
         province : '01',
-        create_by: this.cookieService.getObject('user')['original']['id'],       
+        create_by: this.cookieService.getObject('user')['id'],       
     }
     updateModel={
         name : '',
@@ -47,7 +47,7 @@ export class ProviderComponent implements OnInit {
         address : '',
         district : '',
         province : '001',
-        update_by: this.cookieService.getObject('user')['original']['id'],       
+        update_by: this.cookieService.getObject('user')['id'],       
     }
     constructor(private cs : ProviderService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
         this.toastr.setRootViewContainerRef(vcr);
@@ -122,7 +122,7 @@ export class ProviderComponent implements OnInit {
                         address : '',
                         district : '',
                         province : '',
-                        create_by: this.cookieService.getObject('user')['original']['id'],       
+                        create_by: this.cookieService.getObject('user')['id'],       
                     }
                     this.getListProvider();
                     this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -144,7 +144,7 @@ export class ProviderComponent implements OnInit {
         //                 address : '',
         //                 district : '',
         //                 province : '',
-        //                 create_by: this.cookieService.getObject('user')['original']['id'],       
+        //                 create_by: this.cookieService.getObject('user')['id'],       
         //             }
         //             this.getListProvider();
         //             this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -175,7 +175,7 @@ export class ProviderComponent implements OnInit {
             address : row.address,
             district : row.districtid,
             province : row.provinceid,
-            update_by: this.cookieService.getObject('user')['original']['id'],       
+            update_by: this.cookieService.getObject('user')['id'],       
         }
         console.log(row.provinceid);
         $("#myModal").modal('show');  

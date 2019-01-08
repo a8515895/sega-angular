@@ -25,7 +25,7 @@ export class ProducerComponent implements OnInit {
   value = 50;
   model={
     name : '',
-    create_by: this.cookieService.getObject('user')['original']['id'],       
+    create_by: this.cookieService.getObject('user')['id'],       
   }
   constructor(private ps : ProducerService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -61,7 +61,7 @@ export class ProducerComponent implements OnInit {
         res =>{
             this.model={
                 name : '',
-                create_by: this.cookieService.getObject('user')['original']['id'],       
+                create_by: this.cookieService.getObject('user')['id'],       
             }
             this.getListProducer();
             if(res.err == 0){
@@ -86,7 +86,7 @@ export class ProducerComponent implements OnInit {
       });
   }
   editRow(row){
-      console.log(row);
+      
   }
 
 }

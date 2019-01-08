@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Subject }    from 'rxjs';
+import { HttpService } from '../service/http.service';
 
 @Injectable()
 export class ReportService {    
-    private missionAnnouncedSource = new Subject<string>();
-    missionAnnounced$ = this.missionAnnouncedSource.asObservable();
-    constructor() {    
+    constructor(private _http: HttpService) {    
     }
-    announceMission(mission: string) {
-        this.missionAnnouncedSource.next(mission);
+    getDoanhThu(data){
+        return this._http.get('report/getDoanhThu',data);
+    }
+    getBill(data){
+        return this._http.get('report/getBill',data);
+    }
+    getImport(data){
+        return this._http.get('report/getImport',data);
+    }
+    getProduct(data){
+        return this._http.get('report/getProduct',data);
     }
 }

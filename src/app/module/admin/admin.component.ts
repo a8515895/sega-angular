@@ -11,20 +11,13 @@ import BASE_URL from '../../global';
     templateUrl: './admin.component.html',
 })
 export class AdminComponent implements OnInit {
-    options: Select2Options = {
-        multiple: true,
-        theme: 'classic',
-        closeOnSelect: true
-    };
-    select2Province : Array<Select2OptionData>;
-    select2Province2 : Array<Select2OptionData>;
     customer : any;
     fakeUrl : any;
     base_url : any = BASE_URL;
+    @ViewChild('province') province: any;
     displayedColumns = ['select','name','phone','email','address','district','province','create_at','create_by'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-    @ViewChild('province') province: any;
     public popoverTitle: string = 'Bạn có chắc muốn xóa ???';
     public popoverMessage: string = 'Xóa admin rất nguy hiểm';
     public showSpanName = true;
@@ -45,7 +38,7 @@ export class AdminComponent implements OnInit {
         },   
         status : 1,
         province : '',
-        create_by: this.cookieService.getObject('user')['original']['id'],       
+        create_by: this.cookieService.getObject('user')['id'],       
     }
     updateModel={
         username : '',
@@ -61,7 +54,7 @@ export class AdminComponent implements OnInit {
         },   
         status : 1,
         province : '',
-        create_by: this.cookieService.getObject('user')['original']['id'],         
+        create_by: this.cookieService.getObject('user')['id'],         
     }
     constructor(private cs : CustomerService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
         this.toastr.setRootViewContainerRef(vcr);
@@ -85,9 +78,6 @@ export class AdminComponent implements OnInit {
     getListProvince(){
         this.cs.getProvince().then(
             res => {
-                console.log(res);
-                this.select2Province = res;
-                this.select2Province2 = res;
             },
             err => {
             }
@@ -121,7 +111,7 @@ export class AdminComponent implements OnInit {
                         },   
                         status : 1,
                         province : '',
-                        create_by: this.cookieService.getObject('user')['original']['id'],       
+                        create_by: this.cookieService.getObject('user')['id'],       
                     }
                     this.getListCustomer();
                     this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -160,9 +150,9 @@ export class AdminComponent implements OnInit {
                 value : "",
                 type : ""
             }, 
-            create_by: this.cookieService.getObject('user')['original']['id'],       
+            create_by: this.cookieService.getObject('user')['id'],       
         }
-        console.log(row);
+        
     }
     readUrl(event:any) {
         if (event.target.files && event.target.files[0]) {

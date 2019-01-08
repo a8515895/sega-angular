@@ -17,11 +17,6 @@ import {map} from 'rxjs/operators/map';
     templateUrl: './import-add.component.html',
 })
 export class ImportAddComponent implements OnInit {
-  options: Select2Options = {
-      multiple: true,
-      theme: 'classic',
-      closeOnSelect: true
-  };
   test = 4;
   im = {
     id : '',
@@ -30,9 +25,12 @@ export class ImportAddComponent implements OnInit {
     type : 'home',
     priority : 4+'',
     province : '79',
-    assign : this.cookieService.getObject('user')['original']['id'] + '',
+    assign : this.cookieService.getObject('user')['id'] + '',
   }
   isLoadingProduct : boolean = true;
+  isLoadingKH  : boolean = false;
+  isLoadingBill : boolean = true;
+  isLoadingAddProcess : boolean = false;  
   selectKH = 0;
   totalPrice = 0;
   province = new Array();
@@ -47,8 +45,8 @@ export class ImportAddComponent implements OnInit {
   listBill = new Array();
   addType = 0;
   base_url : any = BASE_URL;
-  agent : String = this.cookieService.getObject('user')['original']['id'];
-  level : String = this.cookieService.getObject('user')['original']['level'];
+  agent : String = this.cookieService.getObject('user')['id'];
+  level : String = this.cookieService.getObject('user')['level'];
   selection = new SelectionModel<Element>(true, []);
   constructor(private prs : ProviderService,private fs : FunctionService,private ps : ProductService,private ads : AdminService,private ims : ImportService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {    this.toastr.setRootViewContainerRef(vcr);
   }
@@ -179,6 +177,7 @@ export class ImportAddComponent implements OnInit {
   successBill(){
     if(this.currentImport.length != 0){
       if(this.im.name != '' && this.im.phone != '' && this.im.type !=''){
+        this.isLoadingAddProcess = true;
         let data = {
           name : this.im.name,
           phone : this.im.phone,
@@ -186,7 +185,7 @@ export class ImportAddComponent implements OnInit {
           detail : this.currentImport,
           province : this.im.province,
           assign : this.im.assign,
-          createBy : this.cookieService.getObject('user')['original']['id'],
+          createBy : this.cookieService.getObject('user')['id'],
           total : this.totalPrice,
         }
         this.ims.addImport(data).then(res=>{
@@ -199,10 +198,11 @@ export class ImportAddComponent implements OnInit {
               type : 'home',
               priority : 4+'',
               province : '79',
-              assign : this.cookieService.getObject('user')['original']['id'] + '',
+              assign : this.cookieService.getObject('user')['id'] + '',
             }
             this.totalPrice=0;
             $("#myModal2").modal("hide");
+            this.isLoadingAddProcess = false;
             this.selectKH = 0;
             this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
           }else{
@@ -279,7 +279,7 @@ export class ImportAddComponent implements OnInit {
             type : 'home',
             priority : 4+'',
             province : res.provinceid,
-            assign : this.cookieService.getObject('user')['original']['id'] + '',
+            assign : this.cookieService.getObject('user')['id'] + '',
           }
         }
       )
@@ -291,7 +291,7 @@ export class ImportAddComponent implements OnInit {
         type : 'home',
         priority : 4+'',
         province : '79',
-        assign : this.cookieService.getObject('user')['original']['id'] + '',
+        assign : this.cookieService.getObject('user')['id'] + '',
       }
     }
   }

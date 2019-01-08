@@ -27,10 +27,12 @@ export class BillAddComponent implements OnInit {
     email : '',
     priority : 4+'',
     province : '79',
-    assign : this.cookieService.getObject('user')['original']['id'] + '',
+    assign : this.cookieService.getObject('user')['id'] + '',
   }
   isLoadingProduct : boolean = true;
+  isLoadingKH  : boolean = false;
   isLoadingBill : boolean = true;
+  isLoadingAddProcess : boolean = false;
   selectKH = 0;
   totalPrice = 0;
   province = new Array();
@@ -45,8 +47,8 @@ export class BillAddComponent implements OnInit {
   listBill = new Array();
   addType = 0;
   base_url : any = BASE_URL;
-  agent : String = this.cookieService.getObject('user')['original']['id'];
-  level : String = this.cookieService.getObject('user')['original']['level'];
+  agent : String = this.cookieService.getObject('user')['id'];
+  level : String = this.cookieService.getObject('user')['level'];
   selection = new SelectionModel<Element>(true, []);
   constructor(private fs : FunctionService,private ps : ProductService,private ads : AdminService,private cs : CustomerService,private bs : BillService,private el: ElementRef,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -201,6 +203,7 @@ export class BillAddComponent implements OnInit {
   successBill(){
     if(this.currentBill.length != 0){
       if(this.kh.name != '' && this.kh.phone != '' && this.kh.type !=''){
+        this.isLoadingAddProcess = true;
         let data = {
           name : this.kh.name,
           phone : this.kh.phone,
@@ -211,7 +214,7 @@ export class BillAddComponent implements OnInit {
           address : this.kh.address,
           email : this.kh.email,
           assign : this.kh.assign,
-          createBy : this.cookieService.getObject('user')['original']['id'],
+          createBy : this.cookieService.getObject('user')['id'],
           total : this.totalPrice,
         }
         this.bs.addBill(data).then(res=>{
@@ -226,9 +229,10 @@ export class BillAddComponent implements OnInit {
               email : '',
               priority : 4+'',
               province : '79',
-              assign : this.cookieService.getObject('user')['original']['id'] + '',
+              assign : this.cookieService.getObject('user')['id'] + '',
             }
             this.totalPrice=0;
+            this.isLoadingAddProcess = false;
             $("#myModal2").modal("hide");
             this.selectKH = 0;
             this.getListBill();
@@ -299,6 +303,7 @@ export class BillAddComponent implements OnInit {
   }
   getListDetailCustomer(){
     let id = this.selectKH;
+    this.isLoadingKH = true;
     if(!this.fs.empty(id)){
       this.cs.getDetailCustomer({id : id}).then(
         res => {
@@ -311,8 +316,9 @@ export class BillAddComponent implements OnInit {
             type : 'home',
             priority : 4+'',
             province : res.provinceid,
-            assign : this.cookieService.getObject('user')['original']['id'] + '',
+            assign : this.cookieService.getObject('user')['id'] + '',
           }
+          this.isLoadingKH = false
         }
       )
     }else{
@@ -325,7 +331,7 @@ export class BillAddComponent implements OnInit {
         email : '',
         priority : 4+'',
         province : '79',
-        assign : this.cookieService.getObject('user')['original']['id'] + '',
+        assign : this.cookieService.getObject('user')['id'] + '',
       }
     }
   }

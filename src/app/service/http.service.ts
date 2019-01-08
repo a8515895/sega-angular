@@ -28,10 +28,10 @@ export class HttpService {
                 url += `${key}=${e}&`;
             })
         }
+        console.log(url);
         return this.http.get(url,this.options)
             .map(this.extractData)
             .toPromise()
-            .catch(this.handleError);
     }
     public post(url,body?){
         url=this.baseUrl+url;
@@ -43,7 +43,6 @@ export class HttpService {
         return this.http.post(url,body,this.options)
         .map(this.extractData)
         .toPromise()
-        .catch(this.handleError);
     }
     public delete(url,body=null){
         url=this.baseUrl+url;
@@ -61,7 +60,6 @@ export class HttpService {
         return this.http.delete(url,this.options)
             .map(this.extractData)
             .toPromise()
-            .catch(this.handleError);
     }
     public put(url,body?){
         url=this.baseUrl+url;
@@ -73,7 +71,6 @@ export class HttpService {
         return this.http.put(url,body,this.options)
         .map(this.extractData)
         .toPromise()
-        .catch(this.handleError);
     }
     private extractData(res: Response) {
         let body = res.json();

@@ -40,7 +40,7 @@ export class CustomerComponent implements OnInit {
         address : '',
         district : '',
         province : '',
-        create_by: this.cookieService.getObject('user')['original']['id'],       
+        create_by: this.cookieService.getObject('user')['id'],       
     }
     updateModel={
         name : '',
@@ -49,7 +49,7 @@ export class CustomerComponent implements OnInit {
         address : '',
         district : '',
         province : '',
-        create_by: this.cookieService.getObject('user')['original']['id'],       
+        create_by: this.cookieService.getObject('user')['id'],       
     }
     constructor(private cs : CustomerService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
         this.toastr.setRootViewContainerRef(vcr);
@@ -111,7 +111,7 @@ export class CustomerComponent implements OnInit {
                         address : '',
                         district : '',
                         province : '',
-                        create_by: this.cookieService.getObject('user')['original']['id'],       
+                        create_by: this.cookieService.getObject('user')['id'],       
                     }
                     this.getListCustomer();
                     this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -133,7 +133,7 @@ export class CustomerComponent implements OnInit {
         //                 address : '',
         //                 district : '',
         //                 province : '',
-        //                 create_by: this.cookieService.getObject('user')['original']['id'],       
+        //                 create_by: this.cookieService.getObject('user')['id'],       
         //             }
         //             this.getListCustomer();
         //             this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
@@ -165,9 +165,9 @@ export class CustomerComponent implements OnInit {
             address : row.address,
             district : row.districtid,
             province : row.provinceid,
-            create_by: this.cookieService.getObject('user')['original']['id'],       
+            create_by: this.cookieService.getObject('user')['id'],       
         }
-        console.log(row);
+        
     }
     selectProvinceChange(e){
         this.model.province = e.value

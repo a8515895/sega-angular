@@ -76,7 +76,7 @@ export class EventComponent implements OnInit {
   value = 50;
   model = {
     name : '',
-    create_by: this.cookieService.getObject('user')['original']['id'],
+    create_by: this.cookieService.getObject('user')['id'],
     startdate : null,
     enddate : null,
     description : '',
@@ -84,7 +84,7 @@ export class EventComponent implements OnInit {
   modelUpdate = {
     id : '',
     name : '',
-    update_by: this.cookieService.getObject('user')['original']['id'],
+    update_by: this.cookieService.getObject('user')['id'],
     startdate : null,
     enddate : null,
     description : '',
@@ -118,7 +118,7 @@ export class EventComponent implements OnInit {
           if(res.err == 0){
             this.model = {
               name : '',
-              create_by: this.cookieService.getObject('user')['original']['id'],
+              create_by: this.cookieService.getObject('user')['id'],
               startdate : null,
               enddate : null,
               description : '',
@@ -145,7 +145,7 @@ export class EventComponent implements OnInit {
             this.modelUpdate = {
               id : '',
               name : '',
-              update_by: this.cookieService.getObject('user')['original']['id'],
+              update_by: this.cookieService.getObject('user')['id'],
               startdate : null,
               enddate : null,
               description : '',
@@ -176,7 +176,7 @@ export class EventComponent implements OnInit {
   updateStatus(id,status){
     if(status == 1) status = 0;
     else status = 1
-    this.es.updateEvent({status : status,id : id,update_by : this.cookieService.getObject('user')['original']['id']}).then(
+    this.es.updateEvent({status : status,id : id,update_by : this.cookieService.getObject('user')['id']}).then(
       res=>{
         this.toastr.success("Cập nhật trạng thái thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       }
@@ -198,7 +198,7 @@ export class EventComponent implements OnInit {
         this.modelUpdate = {
           id : id,
           name : res.name,
-          update_by: this.cookieService.getObject('user')['original']['id'],
+          update_by: this.cookieService.getObject('user')['id'],
           startdate : new Date(res.startdate*1000),
           enddate : new Date(res.enddate*1000),
           description : '',

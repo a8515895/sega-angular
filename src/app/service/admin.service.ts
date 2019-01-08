@@ -30,6 +30,9 @@ export class AdminService {
     updateAdmin(data){
         return this._http.put('updateAdmin',data);
     }
+    getPrivilege(data){
+        return this._http.get('getPrivilege',data);
+    }
     private extractData(res: Response) {
         let body = res.json();
         return body || {};

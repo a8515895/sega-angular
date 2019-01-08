@@ -4,7 +4,6 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ProductService } from '../../service/product.service';
-import { ProducerService } from '../../service/producer.service';
 import { CategoryService } from '../../service/category.service';
 import BASE_URL from '../../global';
 @Component({
@@ -18,6 +17,7 @@ export class ProductComponent implements OnInit {
     fakeUrl2 : any;
     base_url : any = BASE_URL;
     isLoadingProduct : boolean = true;
+    isLoadingAddProduct : boolean = false;
     displayedColumns = ['select','id','img', 'name','category', 'price'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -33,7 +33,7 @@ export class ProductComponent implements OnInit {
         category : '',
         name : '',
         price : '',
-        create_by: this.cookieService.getObject('user')['original']['id'],
+        create_by: this.cookieService.getObject('user')['id'],
         img: {
             name : "",
             value : "",
@@ -46,21 +46,19 @@ export class ProductComponent implements OnInit {
         category : '',
         name : '',
         price : '',
-        producer : '',
-        update_by: this.cookieService.getObject('user')['original']['id'],
+        update_by: this.cookieService.getObject('user')['id'],
         img: {
             name : "",
             value : "",
             type : ""
         },        
     }
-    constructor(private nsx : ProducerService,private ps : ProductService,private cs : CategoryService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
+    constructor(private ps : ProductService,private cs : CategoryService,private cookieService: CookieService,public toastr: ToastsManager, vcr: ViewContainerRef) { 
         this.toastr.setRootViewContainerRef(vcr);
     }
     ngOnInit() { 
         this.getListProduct();
         this.getListCategory();
-        this.getListProducer();
     }
     getListProduct(){
         this.ps.getProduct().then(
@@ -70,6 +68,8 @@ export class ProductComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
                 this.isLoadingProduct = false;
+                this.isLoadingAddProduct = false;
+                console.log(this.product);
             },
             err => {
                 console.log(err);
@@ -80,13 +80,6 @@ export class ProductComponent implements OnInit {
         this.cs.getCategory().then(
             res=>{
                 this.listCategory = res;
-            }
-        );
-    }
-    getListProducer(){
-        this.nsx.getProducer().then(
-            res=>{
-                this.listProducer = res;
             }
         );
     }
@@ -135,33 +128,30 @@ export class ProductComponent implements OnInit {
         }
     }
     onSubmit($event){
-        if(this.model.img.value != ""){
-            this.ps.addProduct(this.model).then(
-                res =>{
-                    this.model={
-                        category : '',
-                        name : '',
-                        price : '',
-                        create_by: this.cookieService.getObject('user')['original']['id'],
-                        img: {
-                            name : "",
-                            value : "",
-                            type : ""
-                        },  
-                        option : ""      
-                    }
-                    this.fakeUrl = "";
-                    this.getListProduct();
-                    if(res.err == 0){
-                        this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
-                    }else{
-                        this.toastr.error(res.err,'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
-                    }            
+        this.isLoadingAddProduct = true;
+        this.ps.addProduct(this.model).then(
+            res =>{
+                this.model={
+                    category : '',
+                    name : '',
+                    price : '',
+                    create_by: this.cookieService.getObject('user')['id'],
+                    img: {
+                        name : "",
+                        value : "",
+                        type : ""
+                    },  
+                    option : ""      
                 }
-            )
-        }else{
-            this.toastr.error("Thiếu hình sản phẩm",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
-        }
+                this.fakeUrl = "";
+                this.getListProduct();
+                if(res.err == 0){
+                    this.toastr.success("Thêm thành công",'Success!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+                }else{
+                    this.toastr.error(res.err,'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
+                }            
+            }
+        )
     }
     onSubmit2($event){
         $('#myModal').modal('hide');
@@ -172,8 +162,7 @@ export class ProductComponent implements OnInit {
                     category : '',
                     name : '',
                     price : '',
-                    producer : '',
-                    update_by: this.cookieService.getObject('user')['original']['id'],
+                    update_by: this.cookieService.getObject('user')['id'],
                     img: {
                         name : "",
                         value : "",
@@ -210,8 +199,7 @@ export class ProductComponent implements OnInit {
             category : row.id_category,
             name : row.name,
             price : row.price,
-            producer : row.id_producer,
-            update_by: this.cookieService.getObject('user')['original']['id'],
+            update_by: this.cookieService.getObject('user')['id'],
             img: {
                 name : "",
                 value : "",

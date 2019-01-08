@@ -3,82 +3,84 @@
     <div class="box-content" >
         <div class="row" >
             <div class="col-md-12" style="position : relative">
-                <div style="position : absolute;height: 25px;width: 25px;cursor : pointer;color: #fff;text-align: center;line-height: 1.8;border-radius: 100%;background: #ccc;right : 5px;top : -10px">
-                    <fa name="minus"></fa>
-                </div>
-                <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;">
-                    <form (ngSubmit)="onSubmit($event)" #form="ngForm">
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 4">
-                                Sản phẩm*
+                <div style="padding : 10px;border: 2px solid #e4e4e4;border-radius: 4px;width: 100%;clear: both;overflow: hidden;min-height: 220px;position: relative;">
+                    <div class="loading" *ngIf="isLoadingAddProduct" style="top : 50px;left : 50%">
+                        <span ><fa name="cog" animation="spin" ></fa> Đang thêm dữ liệu</span>
+                    </div>
+                    <ng-template [ngIf]="!isLoadingAddProduct">
+                        <form (ngSubmit)="onSubmit($event)" #form="ngForm">
+                            <div class="row">
+                                <div class="col-md-6 text-right" style="line-height: 4">
+                                    Sản phẩm*
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field style="width : 100%">
+                                        <input matInput placeholder="Tên sản phẩm" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
+                                        <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                                            <span *ngIf=" name.errors.required">trường này không được trống</span>
+                                            <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
+                                            <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                        </mat-error>                                    
+                                    </mat-form-field>
+                                </div>
+                            </div>                       
+                            <div class="row">
+                                <div class="col-md-6 text-right" style="line-height: 4">
+                                    Giá tiền*
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field style="width : 100%">
+                                        <input type="number" required matInput placeholder="Price" minlength="3" maxlength="60" name="price" [(ngModel)]="model.price" #price="ngModel">
+                                        <mat-error *ngIf="price.invalid && (price.dirty || price.touched)">
+                                            <span *ngIf=" price.errors.required">trường này không được trống</span>
+                                            <span *ngIf=" price.errors.minlength">ít nhất 3 ký tự</span>
+                                            <span *ngIf=" price.errors.maxlength">nhìu nhất 60 ký tự</span>
+                                        </mat-error> 
+                                    </mat-form-field>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-md-6 text-right" style="line-height: 2">
+                                    Loại hàng*
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-select required placeholder="Loại hàng" [(ngModel)]="model.category" name="category">
+                                        <mat-option [value]="i.id" *ngFor="let i of listCategory">{{i.name}}</mat-option> 
+                                    </mat-select>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width : 100%">
-                                    <input matInput placeholder="Product" required minlength="3" maxlength="60" id="name" name="name" [(ngModel)]="model.name" #name="ngModel" >
-                                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
-                                        <span *ngIf=" name.errors.required">trường này không được trống</span>
-                                        <span *ngIf=" name.errors.minlength">ít nhất 3 ký tự</span>
-                                        <span *ngIf=" name.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                    </mat-error>                                    
-                                </mat-form-field>
-                            </div>
-                        </div>                       
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 4">
-                                Price*
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width : 100%">
-                                    <input type="number" required matInput placeholder="Price" minlength="3" maxlength="60" name="price" [(ngModel)]="model.price" #price="ngModel">
-                                    <mat-error *ngIf="price.invalid && (price.dirty || price.touched)">
-                                        <span *ngIf=" price.errors.required">trường này không được trống</span>
-                                        <span *ngIf=" price.errors.minlength">ít nhất 3 ký tự</span>
-                                        <span *ngIf=" price.errors.maxlength">nhìu nhất 60 ký tự</span>
-                                    </mat-error> 
-                                </mat-form-field>
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 2">
-                                Loại hàng*
-                            </div>
-                            <div class="col-md-6">
-                                <mat-select required placeholder="Loại hàng" [(ngModel)]="model.category" name="category">
-                                    <mat-option [value]="i.id" *ngFor="let i of listCategory">{{i.name}}</mat-option> 
-                                </mat-select>
-                            </div>
-                        </div>
-                        <!-- <div class="row" style="margin-top : 10px">
-                            <div class="col-md-6 text-right" style="line-height: 2">
-                                Nhà sản xuất*
-                            </div>
-                            <div class="col-md-6">
-                                <mat-select required placeholder="Nhà sản xuất" [(ngModel)]="model.producer" name="producer">
-                                    <mat-option [value]="i.id" *ngFor="let i of listProducer">{{i.name}}</mat-option> 
-                                </mat-select>
-                            </div>
-                        </div> -->
-                        <div class="row">
-                            <div class="col-md-6 text-right" style="line-height: 4">
-                                Hình*
-                            </div>
-                            <div class="col-md-3" style="line-height: 4">
-                                <button type="button" class="btn btn-default" (click)="file.click()">Chọn hình sản phảm</button>
-                                <input #file class="hide" type="file"  name="img" (change)="readUrl($event)" accept=".jpg,.png">
-                            </div>
-                            <div class="col-md-3" style="line-height: 4;max-height : 350px;margin-top : 10px;overflow : hidden;padding : 0">
-                                <img *ngIf="fakeUrl" [src]="fakeUrl" width="100%">
-                            </div>
-                        </div>     
-                        <div #option>
+                            <!-- <div class="row" style="margin-top : 10px">
+                                <div class="col-md-6 text-right" style="line-height: 2">
+                                    Nhà sản xuất*
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-select required placeholder="Nhà sản xuất" [(ngModel)]="model.producer" name="producer">
+                                        <mat-option [value]="i.id" *ngFor="let i of listProducer">{{i.name}}</mat-option> 
+                                    </mat-select>
+                                </div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-md-6 text-right" style="line-height: 4">
+                                    Hình
+                                </div>
+                                <div class="col-md-3" style="line-height: 4">
+                                    <button type="button" class="btn btn-default" (click)="file.click()">Chọn hình sản phảm</button>
+                                    <input #file class="hide" type="file"  name="img" (change)="readUrl($event)" accept=".jpg,.png">
+                                </div>
+                                <div class="col-md-3 pull-right" style="line-height: 4;max-width : 50px;margin-top : 10px;overflow : hidden;padding : 0">
+                                    <img *ngIf="fakeUrl" [src]="fakeUrl" width="100%">
+                                </div>
+                            </div>     
+                            <div #option>
 
-                        </div>   
-                        <div class="row" style="margin-top : 10px">             
-                            <div class="col-md-6 col-md-offset-6">
-                                <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                            </div>   
+                            <div class="row" style="margin-top : 10px">             
+                                <div class="col-md-6 col-md-offset-6">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </ng-template>
                 </div>
             </div>
         </div>
@@ -112,8 +114,10 @@
                         <ng-container matColumnDef="img">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Hình </mat-header-cell>
                             <mat-cell *matCellDef="let row"> 
-                                <div style="max-height : 150px;max-width: 150px;overflow: hidden;">
-                                    <img src="{{this.base_url}}/public/img/product/{{row.img}}" width="100%" />
+                                <div style="max-height : 100px;max-width: 100px;overflow: hidden;">
+                                    <ng-template [ngIf]="row.img != null">
+                                        <img src="{{this.base_url}}public/img/product/{{row.img}}" width="100%" />
+                                    </ng-template>
                                 </div> 
                             </mat-cell>
                         </ng-container>                    

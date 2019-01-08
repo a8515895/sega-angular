@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
       this.numImport = res.numImport;
       this.numBill = res.numBill;
       this.total_impport_today = res.import_today;
-      console.log(res);
+      
       Object.keys(res.bill).forEach((e)=>{
         categories.push(`${e} giờ`);
         total.push(Number(res.bill[e])-Number(res.import[e]));

@@ -10,7 +10,6 @@ import BASE_URL from '../../global';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import * as $ from 'jquery';
 
 @Component({
   selector: 'app-bill',
@@ -28,7 +27,7 @@ export class BillComponent implements OnInit {
   listBill = new Array();
   base_url : any = BASE_URL;
   stateCtrl: FormControl;
-  agent : String = this.cookieService.getObject('user')['original']['id'];
+  agent : String = this.cookieService.getObject('user')['id'];
   filteredStates: Observable<any[]>;
   displayedColumns = ['select','bill_code','status','total','assign','customer','address','phone','payment','payment_type','create_at'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -161,7 +160,7 @@ export class BillComponent implements OnInit {
     let data = {
       table : table,
       detail : this.currentBill,
-      createBy : this.cookieService.getObject('user')['original']['id'],
+      createBy : this.cookieService.getObject('user')['id'],
       total : 0,
     }
     this.currentBill.forEach(e=>{

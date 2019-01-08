@@ -1,0 +1,65 @@
+<div class="row" style="position: relative">
+    <div class="loading" *ngIf="isLoading" style="top: 10px;left: 40%;">
+        <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
+    </div>
+    <ng-template [ngIf]="!isLoading">
+        <ng-template [ngIf]=" href != 'product' ">   
+            <div class="row">
+                <div class="col-md-12">
+                    <div [chart]="chart"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" *ngIf="table != null && table != '' ">
+                    <mat-table [dataSource]="table" matSort>
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="customer">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Khách hàng </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.customer}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="requester">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Loại khách hàng </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{(row.requester == null || row.requester == '') ? 'Thân thiết' : 'Vãng lai'}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Trạng thái </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="address">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.address}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="total">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Số tiền </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.total | number}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="create_at">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tạo lúc </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.create_at * 1000| date:'d/M/yyyy'}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="payment_at">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Thanh toán lúc </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.payment_at}} {{(row.payment_at != '' && row.payment_at != null ) ? (row.payment_at * 1000| date:'d/M/yyyy') : ''}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);"></mat-row>
+                    </mat-table>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]=" href == 'product' ">
+            <div class="row">
+                <div class="col-md-6">
+                    <div [chart]="chart"></div>
+                </div>
+                <div class="col-md-6">
+                    <div [chart]="chart2"></div>
+                </div>
+            </div>
+        </ng-template>
+    </ng-template>
+</div>

@@ -1,8 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 // import { Socket } from 'ng-socket-io';
-import { Router} from '@angular/router';
-import * as jQuery from 'jquery';
+import { FunctionService} from '../service/function.service';
+import { AdminService} from '../service/admin.service';
 import BASE_URL from '../global';
 @Component({
   selector: 'app-layout',
@@ -19,7 +19,7 @@ export class LayoutComponent implements OnInit {
   isShow ;
   BASE_URL = BASE_URL;
   name : String;
-  avartar : String = this.cookie.getObject('user')['original']['avartar'] != null && this.cookie.getObject('user')['original']['avartar'] != '' ? this.BASE_URL+'/public/img/avartar/'+this.cookie.getObject('user')['original']['avartar'] : this.BASE_URL+'/public/img/avartar/no-avartar.png';
+  avartar : String = this.cookieService.getObject('user')['avartar'] != null && this.cookieService.getObject('user')['avartar'] != '' ? this.BASE_URL+'/public/img/avartar/'+this.cookieService.getObject('user')['avartar'] : this.BASE_URL+'/public/img/avartar/no-avartar.png';
   privilege = {
     admin : true,
     bill : true,
@@ -34,9 +34,10 @@ export class LayoutComponent implements OnInit {
     event : false,
     customer : true,
   }
-  constructor(private cookie : CookieService,private router: Router) { }
+  constructor(private cookieService : CookieService,private ad : AdminService,private fs : FunctionService) { }
   ngOnInit() {
-    this.name=this.cookie.getObject('user')['original']['name'];
+    this.name=this.cookieService.getObject('user')['name'];
+    this.getPrivilege();
     // this.NODE_init();
     // this.NODE_rejoin();
     // let audio = new Audio("../../assets/mess.mp3");
@@ -53,7 +54,7 @@ export class LayoutComponent implements OnInit {
     //     else $("#total-not-seen").removeClass("not-seen").html(data.not_seen)
     //   }
     // })
-    if(Number(this.cookie.get('level')) != 0){
+    if(Number(this.cookieService.get('level')) != 0){
       this.privilege.admin=false;
       this.privilege.category=false;
       this.privilege.product=false;
@@ -64,14 +65,22 @@ export class LayoutComponent implements OnInit {
     }
   }
   // NODE_init(){  
-  //   this.socket.emit("init",{avartar : this.cookie.getObject('user')['original']['avartar'],name : this.cookie.getObject('user')['original']['name'],email : this.cookie.getObject('user')['original']['email'],level : 'admin'});
+  //   this.socket.emit("init",{avartar : this.cookieService.getObject('user')['avartar'],name : this.cookieService.getObject('user')['name'],email : this.cookieService.getObject('user')['email'],level : 'admin'});
   // }
   // NODE_rejoin(){
-  //   this.socket.emit("rejoin",{email : this.cookie.getObject('user')['original']['email']});
+  //   this.socket.emit("rejoin",{email : this.cookieService.getObject('user')['email']});
   // }
   // NODE_is_seen(){
   //   this.socket.emit("is_seen",{total : true})
   // }
+  getPrivilege(){
+    if(!this.fs.empty(this.cookieService.getObject('privilege'))){
+      let previlege = this.cookieService.getObject('privilege');
+      Object.keys(previlege['view']).forEach(e => {
+        this.privilege[previlege['view'][e]] = false;
+      });
+    }
+  }
   onHideDropdown(){
     this.isShowDropdown = false;    
   }
@@ -80,4 +89,5 @@ export class LayoutComponent implements OnInit {
     $event.stopPropagation();
     this.isShowDropdown = true;
   }
+
 }
