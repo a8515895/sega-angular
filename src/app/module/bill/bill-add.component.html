@@ -43,78 +43,83 @@
                     <div class="loading" *ngIf="isLoadingBill">
                         <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
                     </div>
-                    <div style="padding: 10px;overflow-x: hidden;height: 95%;">
-                        <div style="height: 100%;">
-                            <table class="table table-bordered table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Số Hóa đơn</th>
-                                        <th>Giá</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Thanh toán</th>
-                                        <th>Ghi nợ</th>
-                                        <th>Hủy</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let bill of tmpNewBill" style="cursor:pointer">
-                                        <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.bill_code}}</td>
-                                        <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.total | number}}</td>
-                                        <td (click)="getListBillDetail(bill.id)"> {{bill.create_at * 1000| date:'d/M/yyyy'}}</td>
-                                        <td>
-                                            <button class="btn btn-success" (click)="paymentSuccess(bill.id)">Đã thanh toán</button>
-                                        </td>
-                                        <td>
-                                            <input #deptName style="display: inline-block" placeholder="Tên người nợ"/>
-                                            <button class="btn btn-danger" (click)="paymentDebt(bill.id,deptName.value)">Nợ</button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-warning" (click)="paymentDestroy(bill.id)">Hủy</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content" style="height : 550px;">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="myModalLabel">Chi tiết hóa đơn</h4>
-                                        </div>
-                                        <div class="modal-body" style="height : 500px;overflow-x: hidden;">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <table class="table table-bordered table-hover table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>ID</th>
-                                                                <th>Hình</th>
-                                                                <th>Tên</th>
-                                                                <th>Số lượng</th>
-                                                                <th>Giá</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let pro of billDetail">
-                                                                <td>{{pro.id}}</td>
-                                                                <td><img src="{{this.base_url}}public/img/product/{{pro.img}}" width="15%" /></td>
-                                                                <td>{{pro.name}}</td>
-                                                                <td>{{pro.qty | number}}</td>
-                                                                <td>{{pro.price | number}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                    <div class="loading" *ngIf="isLoadingUpdateProcess">
+                        <span ><fa name="cog" animation="spin" ></fa> Đang cập nhật dữ liệu</span>
+                    </div>
+                    <ng-template [ngIf]="!isLoadingUpdateProcess">
+                        <div style="padding: 10px;overflow-x: hidden;height: 95%;">
+                            <div style="height: 100%;">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Số Hóa đơn</th>
+                                            <th>Giá</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Thanh toán</th>
+                                            <th>Ghi nợ</th>
+                                            <th>Hủy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let bill of tmpNewBill" style="cursor:pointer">
+                                            <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.bill_code}}</td>
+                                            <td data-toggle="modal" data-target="#myModal" (click)="getListBillDetail(bill.id)">{{bill.total | number}}</td>
+                                            <td (click)="getListBillDetail(bill.id)"> {{bill.create_at * 1000| date:'d/M/yyyy'}}</td>
+                                            <td>
+                                                <button class="btn btn-success" (click)="paymentSuccess(bill.id)">Đã thanh toán</button>
+                                            </td>
+                                            <td>
+                                                <input #deptName style="display: inline-block" placeholder="Tên người nợ"/>
+                                                <button class="btn btn-danger" (click)="paymentDebt(bill.id,deptName.value)">Nợ</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning" (click)="paymentDestroy(bill.id)">Hủy</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content" style="height : 550px;">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Chi tiết hóa đơn</h4>
+                                            </div>
+                                            <div class="modal-body" style="height : 500px;overflow-x: hidden;">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <table class="table table-bordered table-hover table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Hình</th>
+                                                                    <th>Tên</th>
+                                                                    <th>Số lượng</th>
+                                                                    <th>Giá</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let pro of billDetail">
+                                                                    <td>{{pro.id}}</td>
+                                                                    <td><img src="{{this.base_url}}public/img/product/{{pro.img}}" width="15%" /></td>
+                                                                    <td>{{pro.name}}</td>
+                                                                    <td>{{pro.qty | number}}</td>
+                                                                    <td>{{pro.price | number}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-template>
                 </div>             
                 <div class="row" style="position : relative;padding-top : 0;height: calc(50% - 10px);border: 1px solid #155e90;border-radius : 4px;margin-top:10px;">
                     <div class="loading" *ngIf="isLoadingProduct">
@@ -249,7 +254,7 @@
                 </ng-template>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" (click)="successBill()" [disabled]="isLoadingKH">Xác nhận</button>
+                <button type="button" class="btn btn-success" (click)="successBill()" [disabled]="isLoadingKH || isLoadingAddProcess">Xác nhận</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

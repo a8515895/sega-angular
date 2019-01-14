@@ -21,7 +21,7 @@ import { DatetimeService }     from '../../service/datetime.service';
 })
 export class ReportComponent implements OnInit {
   date : any;
-  href : any = "product";
+  href : any = "doanhthu";
   time : any = this.dt.getTime()+"_"+this.dt.getTime();
   @ViewChild("input1") input1 : ElementRef;
   @ViewChild("input2") input2 : ElementRef;

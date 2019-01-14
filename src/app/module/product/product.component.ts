@@ -18,6 +18,7 @@ export class ProductComponent implements OnInit {
     base_url : any = BASE_URL;
     isLoadingProduct : boolean = true;
     isLoadingAddProduct : boolean = false;
+    isLoadingDelProduct : boolean = false;
     displayedColumns = ['select','id','img', 'name','category', 'price'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -69,7 +70,7 @@ export class ProductComponent implements OnInit {
                 this.dataSource.sort = this.sort;
                 this.isLoadingProduct = false;
                 this.isLoadingAddProduct = false;
-                console.log(this.product);
+                this.isLoadingDelProduct = false;
             },
             err => {
                 console.log(err);
@@ -181,6 +182,7 @@ export class ProductComponent implements OnInit {
         )        
     }
     clickTrash(){
+        this.isLoadingDelProduct = true;
         if(this.selection.selected.length==0){
             return this.toastr.error("Chưa select sản phẩm xóa",'Error!',{positionClass : 'toast-top-left',animate : 'flyLeft',showCloseButton : true});
         }

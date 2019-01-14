@@ -204,7 +204,7 @@ export class ImportAddComponent implements OnInit {
             $("#myModal2").modal("hide");
             this.isLoadingAddProcess = false;
             this.selectKH = 0;
-            this.toastr.success("Thêm hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
+            this.toastr.success("Thêm phiếu nhập thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
           }else{
             this.toastr.error(res.err,'Error!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
           }

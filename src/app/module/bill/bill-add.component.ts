@@ -33,6 +33,7 @@ export class BillAddComponent implements OnInit {
   isLoadingKH  : boolean = false;
   isLoadingBill : boolean = true;
   isLoadingAddProcess : boolean = false;
+  isLoadingUpdateProcess : boolean = false;
   selectKH = 0;
   totalPrice = 0;
   province = new Array();
@@ -141,6 +142,7 @@ export class BillAddComponent implements OnInit {
         this.newBill=res;
         this.tmpNewBill=res;
         this.isLoadingBill = false;
+        this.isLoadingUpdateProcess = false;
       },
       err => {
       }
@@ -255,6 +257,7 @@ export class BillAddComponent implements OnInit {
       status : 'solved',
       payment : 1
     };
+    this.isLoadingUpdateProcess = true;
     this.bs.updateBill(data).then(res=>{
       this.toastr.success("Thanh toán thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       this.getListBill();
@@ -270,6 +273,7 @@ export class BillAddComponent implements OnInit {
       debt_name: name,
 
     };
+    this.isLoadingUpdateProcess = true;
     this.bs.updateBill(data).then(res=>{
       this.toastr.warning("Ghi nợ thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       this.getListBill();
@@ -280,6 +284,7 @@ export class BillAddComponent implements OnInit {
       id : bill,
       status : 'delete',
     };
+    this.isLoadingUpdateProcess = true;
     this.bs.updateBill(data).then(res=>{
       this.toastr.warning("Hủy hóa đơn thành công",'Success!',{positionClass : 'toast-bottom-left',animate : 'flyLeft',showCloseButton : true});
       this.getListBill();

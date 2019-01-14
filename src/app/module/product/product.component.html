@@ -76,7 +76,7 @@
                             </div>   
                             <div class="row" style="margin-top : 10px">             
                                 <div class="col-md-6 col-md-offset-6">
-                                    <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid"><fa name="plus"></fa> Thêm</button>
+                                    <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid || isLoadingDelProduct"><fa name="plus"></fa> Thêm</button>
                                 </div>
                             </div>
                         </form>
@@ -85,10 +85,13 @@
             </div>
         </div>
         <div class="row" style="position : relative">
-            <div class="loading" *ngIf="isLoadingProduct" style="top : 100px;left : 50%">
+            <div class="loading" *ngIf="isLoadingProduct" style="top : 100px;left : 50%;z-index: 1000;">
                 <span ><fa name="cog" animation="spin" ></fa> Đang load dữ liệu</span>
             </div>
-            <ng-template [ngIf]="!isLoadingProduct">
+            <div class="loading" *ngIf="isLoadingDelProduct" style="top : 100px;left : 50%;z-index: 1000;">
+                <span ><fa name="cog" animation="spin" ></fa> Đang xóa dữ liệu</span>
+            </div>
+            <ng-template [ngIf]="!isLoadingProduct || !isLoadingDelProduct">
                 <div class="col-md-12">
                     <mat-table [dataSource]="dataSource" matSort>
                         <ng-container matColumnDef="select">
@@ -209,7 +212,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row" style="margin-top : 10px">
+                <!-- <div class="row" style="margin-top : 10px">
                     <div class="col-md-3 text-right" style="line-height: 2">
                         Nhà sản xuất*
                     </div>
@@ -219,7 +222,7 @@
                             <option *ngFor="let i of listProducer" value="{{i.id}}">{{i.name}}</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-md-3 text-right" style="line-height: 4">
                         Hình*
