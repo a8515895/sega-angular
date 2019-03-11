@@ -139,7 +139,7 @@
                     </ng-container>
                     <ng-container matColumnDef="create_at">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tạo lúc </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.create_at}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.create_at * 1000| date:'d/M/yyyy'}} </mat-cell>
                     </ng-container>
                 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

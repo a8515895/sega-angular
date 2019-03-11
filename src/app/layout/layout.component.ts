@@ -21,7 +21,7 @@ export class LayoutComponent implements OnInit {
   name : String;
   avartar : String = this.cookieService.getObject('user')['avartar'] != null && this.cookieService.getObject('user')['avartar'] != '' ? this.BASE_URL+'/public/img/avartar/'+this.cookieService.getObject('user')['avartar'] : this.BASE_URL+'/public/img/avartar/no-avartar.png';
   privilege = {
-    admin : true,
+    admin : false,
     bill : true,
     category : true,
     product : true,

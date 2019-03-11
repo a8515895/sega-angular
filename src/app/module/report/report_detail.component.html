@@ -43,7 +43,7 @@
                         </ng-container>
                         <ng-container matColumnDef="payment_at">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Thanh toán lúc </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.payment_at}} {{(row.payment_at != '' && row.payment_at != null ) ? (row.payment_at * 1000| date:'d/M/yyyy') : ''}} </mat-cell>
+                            <mat-cell *matCellDef="let row"> {{(row.payment_at != '' && row.payment_at != null ) ? (row.payment_at * 1000| date:'d/M/yyyy') : ''}} </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editRow(row);"></mat-row>
